@@ -2,8 +2,6 @@ name: Deep API CI/CD
 
 on:
   push:
-    branches:
-      - main
 
 jobs:
   build-and-test:
