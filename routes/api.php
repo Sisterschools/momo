@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
-
+use App\Http\Controllers\Api\SchoolController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,12 +35,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/users/password', [AuthController::class, 'updatePassword']);
     Route::get('/users/roles', [UserController::class, 'getRoles']);
 
+    // User routes
     Route::resource('users', UserController::class);
 
-    // School routes (to be implemented)
-    Route::prefix('schools')->group(function () {
-        // Add school-related routes
-    });
+    // School routes 
+    Route::resource('schools', SchoolController::class);
+
+
 
     // Teacher routes (to be implemented)
     Route::prefix('teachers')->group(function () {
