@@ -15,7 +15,7 @@ class StoreSchoolRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'photo' => 'nullable|image|max:2048',
+            'photo' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'address' => 'required|string',
             'description' => 'required|string',
             'phone_number' => 'nullable|string|max:20',

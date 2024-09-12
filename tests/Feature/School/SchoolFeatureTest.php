@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class SchoolFeatureTest extends TestCase
 {
@@ -62,12 +64,6 @@ class SchoolFeatureTest extends TestCase
             '/api/schools',
             array_merge($schoolData, $userData)
         );
-
-        // $response = $this->postJson('/api/schools', [
-        //     'school' => $schoolData,
-        //     'user' => $userData
-        // ]);
-
 
         $response->assertStatus(201)
             ->assertJson([
@@ -164,5 +160,57 @@ class SchoolFeatureTest extends TestCase
         // Ensure that the user was not created in the database with the provided email
         $this->assertDatabaseMissing('users', ['email' => $userData['email']]);
     }
+
+
+    public function test_can_create_school_with_photo()
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        // Fake the storage disk for testing purposes
+        Storage::fake('public');
+
+        // Create a fake file for testing
+        $file = UploadedFile::fake()->image('school-photo2.jpg');
+
+        // Prepare the data
+        $schoolData = [
+            'title' => 'Test School',
+            'address' => '123 Test St',
+            'description' => 'This is a test school',
+            'phone_number' => '555-1234',
+            'website' => 'http://testschool.com',
+            'founding_year' => 2000,
+            'student_capacity' => 500,
+            'photo' => $file, // Pass the fake file as the photo
+        ];
+
+
+        $userData = [
+            'name' => 'School Admin',
+            'email' => 'school@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'role' => 'school'
+        ];
+
+        // The request should simulate separate school and user inputs
+        $response = $this->actingAs($admin)->postJson(
+            '/api/schools',
+            array_merge($schoolData, $userData)
+        );
+
+        // Assert the request was successful
+        $response->assertStatus(201);
+
+        // Assert the file was stored in the correct directory
+        Storage::disk('public')->assertExists('photos/' . $file->hashName());
+
+        // Assert the school was created in the database
+        $this->assertDatabaseHas('schools', [
+            'title' => 'Test School',
+            'photo' => 'photos/' . $file->hashName(), // Assert the photo path was saved
+        ]);
+    }
+
 
 }
