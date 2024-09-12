@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // School routes 
     Route::resource('schools', SchoolController::class);
+    Route::post('schools/search', [SchoolController::class, 'search']);
 
 
 

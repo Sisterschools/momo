@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class School extends Model
 {
@@ -39,5 +40,12 @@ class School extends Model
             $school->user->delete();
 
         });
+    }
+
+    public function scopeSearch(Builder $query, $term)
+    {
+        return $query->where('title', 'like', "%{$term}%")
+            ->orWhere('address', 'like', "%{$term}%")
+            ->orWhere('phone_number', 'like', "%{$term}%");
     }
 }

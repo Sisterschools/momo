@@ -8,11 +8,11 @@ use App\Models\User;
 use App\Http\Requests\School\StoreSchoolRequest;
 use App\Http\Requests\School\UpdateSchoolRequest;
 use App\Http\Requests\User\RegisterUserRequest;
+use App\Http\Requests\School\SearchSchoolRequest;
 use App\Http\Resources\SchoolResource;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class SchoolController extends Controller
 {
@@ -68,5 +68,13 @@ class SchoolController extends Controller
         $this->authorize('delete', $school);
         $school->delete();
         return response()->json(null, 204);
+    }
+
+    public function search(SearchSchoolRequest $request)
+    {
+        $term = $request->input('search');
+        $schools = School::search($term)->get();
+
+        return response()->json($schools);
     }
 }
