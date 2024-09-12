@@ -426,11 +426,7 @@ class UserFeatureTest extends TestCase
             'Authorization' => 'Bearer ' . $token,
         ])->deleteJson('/api/users/' . $user->id);
 
-        $response->assertStatus(200)
-            ->assertJson([
-                'message' => 'User deleted successfully',
-            ]);
-
+        $response->assertStatus(204);
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
 

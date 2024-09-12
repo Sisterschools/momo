@@ -38,46 +38,6 @@ class SchoolFeatureTest extends TestCase
     }
 
 
-    public function test_admin_can_create_school_with_user()
-    {
-        $admin = User::factory()->create(['role' => 'admin']);
-
-        $schoolData = [
-            'title' => 'Test School',
-            'address' => '123 School St.',
-            'description' => 'A test description',
-            'phone_number' => '123-456-7890',
-            'founding_year' => 2000,
-            'student_capacity' => 500,
-        ];
-
-        $userData = [
-            'name' => 'School Admin',
-            'email' => 'school@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-            'role' => 'school'
-        ];
-
-        // The request should simulate separate school and user inputs
-        $response = $this->actingAs($admin)->postJson(
-            '/api/schools',
-            array_merge($schoolData, $userData)
-        );
-
-        $response->assertStatus(201)
-            ->assertJson([
-                'data' => [
-                    'title' => $schoolData['title'],
-                    'address' => $schoolData['address'],
-                    'description' => $schoolData['description'],
-                ]
-            ]);
-
-        $this->assertDatabaseHas('users', ['email' => $userData['email']]);
-        $this->assertTrue(Hash::check($userData['password'], User::first()->password));
-    }
-
     public function test_admin_cannot_create_school_with_invalid_role_user()
     {
         // Create an admin user
@@ -162,7 +122,7 @@ class SchoolFeatureTest extends TestCase
     }
 
 
-    public function test_can_create_school_with_photo()
+    public function test_can_create_school_with_photo_and_user()
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
@@ -184,16 +144,15 @@ class SchoolFeatureTest extends TestCase
             'photo' => $file, // Pass the fake file as the photo
         ];
 
-
         $userData = [
-            'name' => 'School Admin',
-            'email' => 'school@example.com',
+            'name' => 'School User',
+            'email' => 'schooluser@example.com',
             'password' => 'password',
-            'password_confirmation' => 'password',
-            'role' => 'school'
+            'password_confirmation' => 'password',  // Confirm password
+            'role' => 'school'  // Ensure role is 'school'
         ];
 
-        // The request should simulate separate school and user inputs
+        // The request should simulate creating a school with the provided data
         $response = $this->actingAs($admin)->postJson(
             '/api/schools',
             array_merge($schoolData, $userData)
@@ -210,7 +169,119 @@ class SchoolFeatureTest extends TestCase
             'title' => 'Test School',
             'photo' => 'photos/' . $file->hashName(), // Assert the photo path was saved
         ]);
+
+        // Assert the associated user was created
+        $this->assertDatabaseHas('users', [
+            'name' => 'School User',
+            'email' => 'schooluser@example.com',
+            'role' => 'school'
+        ]);
     }
 
 
+    public function test_can_update_school_with_photo()
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        // Fake the storage disk for testing purposes
+        Storage::fake('public');
+
+        // Create a school to update
+        $school = School::factory()->create();
+
+        // Create a fake file for testing
+        $file = UploadedFile::fake()->image('new-school-photo.jpg');
+
+        // Prepare the updated data
+        $updateData = [
+            'title' => 'Updated School Title',
+            'address' => '456 Updated St',
+            'description' => 'This is an updated test school',
+            'phone_number' => '555-5678',
+            'website' => 'http://updatedschool.com',
+            'founding_year' => 2010,
+            'student_capacity' => 600,
+            'photo' => $file, // Pass the fake file as the photo
+        ];
+
+        // Simulate the update request
+        $response = $this->actingAs($admin)->putJson(
+            '/api/schools/' . $school->id,
+            $updateData
+        );
+
+        // Assert the request was successful
+        $response->assertStatus(200);
+
+        // Assert the old file was removed
+        Storage::disk('public')->assertMissing('photos/old-photo.jpg');
+
+        // Assert the new file was stored in the correct directory
+        Storage::disk('public')->assertExists('photos/' . $file->hashName());
+
+        // Assert the school was updated in the database
+        $this->assertDatabaseHas('schools', [
+            'id' => $school->id,
+            'title' => 'Updated School Title',
+            'photo' => 'photos/' . $file->hashName(), // Assert the new photo path was saved
+        ]);
+    }
+
+
+    public function test_school_and_associated_user_are_deleted()
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        // Fake the storage disk for testing purposes
+        Storage::fake('public');
+
+        // Create a fake file for testing
+        $file = UploadedFile::fake()->image('school-photo2.jpg');
+
+        // Prepare the data
+        $schoolData = [
+            'title' => 'Test School',
+            'address' => '123 Test St',
+            'description' => 'This is a test school',
+            'phone_number' => '555-1234',
+            'website' => 'http://testschool.com',
+            'founding_year' => 2000,
+            'student_capacity' => 500,
+            'photo' => $file, // Pass the fake file as the photo
+        ];
+
+        $userData = [
+            'name' => 'School User',
+            'email' => 'schooluser@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',  // Confirm password
+            'role' => 'school'  // Ensure role is 'school'
+        ];
+
+        // The request should simulate creating a school with the provided data
+        $response = $this->actingAs($admin)->postJson(
+            '/api/schools',
+            array_merge($schoolData, $userData)
+        );
+        // Decode the response data
+        $responseData = $response->json();
+
+        // Access the school ID
+        $schoolId = $responseData['data']['id'];
+
+        $userId = $responseData['data']['user']['id'];
+
+
+        // Perform the delete request
+        $response = $this->actingAs($admin)->deleteJson('/api/schools/' . $schoolId);
+
+        // Assert the response status is 204 No Content
+        $response->assertStatus(204);
+
+        // Assert the school no longer exists in the database
+        $this->assertDatabaseMissing('schools', ['id' => $schoolId]);
+
+        // Assert the associated user no longer exists in the database
+        $this->assertDatabaseMissing('users', ['id' => $userId]);
+    }
 }

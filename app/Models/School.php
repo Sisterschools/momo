@@ -29,4 +29,15 @@ class School extends Model
     {
         return $this->morphOne(User::class, 'profile');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($school) {
+            // Delete the associated user if exists
+            $school->user->delete();
+
+        });
+    }
 }

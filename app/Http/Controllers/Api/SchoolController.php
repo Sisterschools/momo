@@ -20,7 +20,7 @@ class SchoolController extends Controller
     public function index()
     {
         $this->authorize('viewAny', School::class);
-        $schools = School::paginate();
+        $schools = School::paginate(10);
         return SchoolResource::collection($schools);
     }
 
