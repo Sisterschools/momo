@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\School;
 use App\Models\User;
 use App\Http\Requests\School\StoreSchoolRequest;
+use App\Events\UserRegisteredEvent;
 use App\Http\Requests\School\UpdateSchoolRequest;
 use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Requests\School\SearchSchoolRequest;
@@ -35,12 +36,12 @@ class SchoolController extends Controller
 
         try {
             $school = School::create($schoolData);
-
             $user = User::create($userData);
-
             $school->user()->save($user);
 
             DB::commit();
+
+            event(new UserRegisteredEvent($user, $userData['password']));
 
             return SchoolResource::make($school);
 

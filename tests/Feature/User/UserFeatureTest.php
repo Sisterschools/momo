@@ -173,16 +173,7 @@ class UserFeatureTest extends TestCase
             ]);
     }
 
-    /**
-     * Test admin can register a user and send email.
-     *
-     * @return void
-     */
-    /**
-     * Test admin can register a user and queue an email.
-     *
-     * @return void
-     */
+
     /**
      * Test admin can register a user and send email.
      *
@@ -240,8 +231,6 @@ class UserFeatureTest extends TestCase
     {
         // Fake events
         Event::fake();
-        Mail::fake();
-        Queue::fake();
         // Create an admin user and authenticate
         $admin = User::factory()->create([
             'role' => 'admin',
@@ -264,6 +253,7 @@ class UserFeatureTest extends TestCase
                 && $event->password === 'password123';
         });
     }
+
 
 
     /**

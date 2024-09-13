@@ -5,13 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\UserResource;
 
+use App\Http\Resources\UserResource;
+use App\Events\UserRegisteredEvent;
 use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Requests\User\LoginUserRequest;
 use App\Http\Requests\User\UpdatePasswordRequest;
@@ -19,10 +15,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
-use App\Events\UserRegisteredEvent;
-use Illuminate\Support\Facades\Log;
-
 
 class AuthController extends Controller
 {
@@ -34,10 +26,7 @@ class AuthController extends Controller
 
         $data = $request->validated();
         $user = User::create($data);
-
-        // Fire the event with the user and plain password
         event(new UserRegisteredEvent($user, $data['password']));
-        Log::info('UserRegisteredEvent event fired for user: ' . $user->email);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
