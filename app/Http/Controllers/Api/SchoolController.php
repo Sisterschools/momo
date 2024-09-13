@@ -75,6 +75,6 @@ class SchoolController extends Controller
         $term = $request->input('search');
         $schools = School::search($term)->get();
 
-        return response()->json($schools);
+        return SchoolResource::collection($schools);
     }
 }

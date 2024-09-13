@@ -28,6 +28,77 @@ class SchoolFeatureTest extends TestCase
             ]);
     }
 
+    public function test_admin_can_view_single_school()
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        // Fake the storage disk for testing purposes
+        Storage::fake('public');
+
+        // Create a fake file for testing
+        $file = UploadedFile::fake()->image('school-photo2.jpg');
+
+        // Prepare the school data with a fake file
+        $schoolData = [
+            'title' => 'Test School',
+            'address' => '123 Test St',
+            'description' => 'This is a test school',
+            'phone_number' => '555-1234',
+            'website' => 'http://testschool.com',
+            'founding_year' => 2000,
+            'student_capacity' => 500,
+            'photo' => $file, // Pass the fake file as the photo
+        ];
+
+        $userData = [
+            'name' => 'School User',
+            'email' => 'schooluser@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'role' => 'school',
+        ];
+
+
+        // Create the school with the associated user
+        $response = $this->actingAs($admin)->postJson(
+            '/api/schools',
+            array_merge($schoolData, $userData)
+        );
+        // Assert the request was successful and get the created school ID
+        $response->assertStatus(201);
+        $school = $response->json('data'); // Assuming 'data' key contains the school details
+        $schoolId = $school['id'];
+
+        // Retrieve the same school
+        $response = $this->actingAs($admin)->getJson('/api/schools/' . $schoolId);
+        $response->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    'id' => $school['id'],
+                    'title' => $school['title'],
+                    'photo' => $school['photo'],
+                    'address' => $school['address'],
+                    'description' => $school['description'],
+                    'phone_number' => $school['phone_number'],
+                    'website' => $school['website'],
+                    'founding_year' => $school['founding_year'],
+                    'student_capacity' => $school['student_capacity'],
+                    'created_at' => $school['created_at'],
+                    'updated_at' => $school['updated_at'],
+                    'user' => $school['user'] ? [
+                        'id' => $school['user']['id'],
+                        'name' => $school['user']['name'],
+                        'email' => $school['user']['email'],
+                        'role' => $school['user']['role'],
+                        'created_at' => $school['user']['created_at'],
+                        'updated_at' => $school['user']['updated_at'],
+                    ] : null,
+                ]
+            ]);
+    }
+
+
+
     public function test_non_admin_cannot_view_schools_list()
     {
         $user = User::factory()->create(['role' => 'teacher']);

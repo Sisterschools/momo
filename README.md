@@ -140,11 +140,79 @@ All routes in this section require authentication. Some operations are restricte
 - **Description:** Delete a user
 - **Authentication:** Required (Bearer Token of an admin user)
 
-## Schools, Teachers, and Students
+
+## Schools
+
+All routes in this section require authentication using Bearer tokens.
+
+### List Schools
+
+- **URL:** `/api/schools`
+- **Method:** `GET`
+- **Description:** Retrieve a list of schools
+- **Authentication:** Required (Bearer Token)
+
+### Get School
+
+- **URL:** `/api/schools/{id}`
+- **Method:** `GET`
+- **Description:** Retrieve details of a specific school
+- **Authentication:** Required (Bearer Token)
+
+### Create School
+
+- **URL:** `/api/schools`
+- **Method:** `POST`
+- **Description:** Create a new school
+- **Authentication:** Required (Bearer Token)
+- **Required Fields:**
+  - School Data:
+    - `title`: String
+    - `address`: String
+    - `description`: String
+    - `phone_number`: String
+    - `founding_year`: Integer
+    - `student_capacity`: Integer
+  - User Data:
+    - `name`: String
+    - `email`: String
+    - `password`: String
+    - `password_confirmation`: String
+    - `role`: String (should be 'school' or non-admin role)
+
+### Update School
+
+- **URL:** `/api/schools/{id}`
+- **Method:** `PUT/PATCH`
+- **Description:** Update an existing school
+- **Authentication:** Required (Bearer Token)
+
+### Delete School
+
+- **URL:** `/api/schools/{id}`
+- **Method:** `DELETE`
+- **Description:** Delete a school
+- **Authentication:** Required (Bearer Token)
+
+### Search Schools
+
+- **URL:** `/api/schools/search`
+- **Method:** `POST`
+- **Description:** Search for schools based on various criteria
+- **Authentication:** Required (Bearer Token)
+- **Request Body:**
+  - `title` (optional): String
+  - `address` (optional): String
+  - `phone_number` (optional): String
+  - `website` (optional): URL
+  - `founding_year` (optional): Integer (between 1800 and current year)
+  - `student_capacity` (optional): Integer (minimum 1)
+- **Response:** Returns a list of schools matching the search criteria
+
+## Teachers and Students
 
 These routes are yet to be implemented. They will be accessible under the following prefixes:
 
-- Schools: `/api/schools`
 - Teachers: `/api/teachers`
 - Students: `/api/students`
 
