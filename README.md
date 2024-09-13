@@ -173,6 +173,8 @@ All routes in this section require authentication using Bearer tokens.
     - `phone_number`: String
     - `founding_year`: Integer
     - `student_capacity`: Integer
+    - `photo`: Nullable, image file (jpg, png, jpeg), max size 2048 KB
+    - `website`: Nullable, valid URL
   - User Data:
     - `name`: String
     - `email`: String
