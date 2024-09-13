@@ -47,7 +47,8 @@ class SchoolController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['message' => 'Error creating school and user', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Error creating school and user',
+            'errors' => $e->getMessage()], 500);
         }
     }
 
@@ -61,7 +62,10 @@ class SchoolController extends Controller
     {
         $this->authorize('update', $school);
         $school->update($request->validated());
-        return SchoolResource::make($school);
+        return response()->json([
+            'message' => 'School updated successfully.',
+            'data' =>  SchoolResource::make($school)
+        ]);
     }
 
     public function destroy(School $school)
