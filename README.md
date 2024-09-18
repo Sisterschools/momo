@@ -1,66 +1,232 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# DEEP REST API Documentation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This document outlines the endpoints available in our DEEP REST API application and provides setup instructions.
 
-## About Laravel
+## Setup Instructions
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Before using the API, ensure you have completed the following steps:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. **Install Docker**: Make sure Docker is installed on your system.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+2. **Configure Environment Variables**:
+   - Copy the example environment file:
 
-## Learning Laravel
+     ```
+     cp .env.example .env
+     ```
+   - Open the new `.env` file and update the MySQL, redis, mail server details according to your setup.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. **Build and start the containers**:
+   ```
+   docker compose up -d --build
+   ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+4. **Install Composer dependencies**:
+   ```
+   docker compose exec web composer install
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+5. **Check logs for admin credentials**:
+   ```
+   docker compose logs web
+   ```
+   This command will display the logs for DEEP API. Look for the output containing the admin user's credentials. Make sure to save these for logging in as an admin.
 
-## Laravel Sponsors
+6. (Optional) Run tests:
+   ```
+   docker compose exec web php artisan test
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Authentication
 
-### Premium Partners
+Authentication for this API is handled using Bearer tokens. After a successful login, you'll receive a token that should be included in the Authorization header for all protected routes.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Login
 
-## Contributing
+- **URL:** `/api/login`
+- **Method:** `POST`
+- **Description:** Authenticate a user and receive an access token
+- **Required Fields:**
+  - `email`
+  - `password`
+- **Response:** Returns user details and an access token upon successful authentication
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Register (Admin only)
 
-## Code of Conduct
+- **URL:** `/api/register`
+- **Method:** `POST`
+- **Description:** Register a new user (only accessible to admin users)
+- **Required Fields:**
+  - `name`
+  - `email`
+  - `password`
+  - `password_confirmation`
+- **Authentication:** Required (Bearer Token of an admin user)
+- **Response:** Returns user details and an access token upon successful registration
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Logout
 
-## Security Vulnerabilities
+- **URL:** `/api/logout`
+- **Method:** `POST`
+- **Description:** Invalidate the user's access token
+- **Authentication:** Required (Bearer Token)
+- **Headers:**
+  - `Authorization: Bearer <your_access_token>`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Using Authentication for Protected Routes
 
-## License
+For all protected routes, you must include the Bearer token in the Authorization header of your HTTP request. Here's an example of how to structure your requests:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+Authorization: Bearer <your_access_token>
+```
+
+Replace `<your_access_token>` with the actual token you received from the login process.
+
+## User Management
+
+All routes in this section require authentication. Some operations are restricted to admin users only.
+
+### Update Password
+
+- **URL:** `/api/users/password`
+- **Method:** `PATCH`
+- **Description:** Update the authenticated user's password
+- **Required Fields:**
+  - `current_password`
+  - `new_password`
+  - `new_password_confirmation`
+- **Authentication:** Required (Bearer Token)
+
+### Get User Roles
+
+- **URL:** `/api/users/roles`
+- **Method:** `GET`
+- **Description:** Retrieve available user roles
+- **Authentication:** Required (Bearer Token)
+
+### List Users
+
+- **URL:** `/api/users`
+- **Method:** `GET`
+- **Description:** Retrieve a list of users
+- **Authentication:** Required (Bearer Token)
+
+### Get User
+
+- **URL:** `/api/users/{id}`
+- **Method:** `GET`
+- **Description:** Retrieve details of a specific user
+- **Authentication:** Required (Bearer Token)
+
+### Create User
+
+- **URL:** `/api/users`
+- **Method:** `POST`
+- **Description:** Create a new user
+- **Authentication:** Required (Bearer Token)
+
+### Update User (Admin only)
+
+- **URL:** `/api/users/{id}`
+- **Method:** `PUT/PATCH`
+- **Description:** Update an existing user
+- **Authentication:** Required (Bearer Token of an admin user)
+
+### Delete User (Admin only)
+
+- **URL:** `/api/users/{id}`
+- **Method:** `DELETE`
+- **Description:** Delete a user
+- **Authentication:** Required (Bearer Token of an admin user)
+
+
+## Schools
+
+All routes in this section require authentication using Bearer tokens.
+
+### List Schools
+
+- **URL:** `/api/schools`
+- **Method:** `GET`
+- **Description:** Retrieve a list of schools
+- **Authentication:** Required (Bearer Token)
+
+### Get School
+
+- **URL:** `/api/schools/{id}`
+- **Method:** `GET`
+- **Description:** Retrieve details of a specific school
+- **Authentication:** Required (Bearer Token)
+
+### Create School
+
+- **URL:** `/api/schools`
+- **Method:** `POST`
+- **Description:** Create a new school
+- **Authentication:** Required (Bearer Token)
+- **Required Fields:**
+  - School Data:
+    - `title`: String
+    - `address`: String
+    - `description`: String
+    - `phone_number`: String
+    - `founding_year`: Integer
+    - `student_capacity`: Integer
+    - `photo`: Nullable, image file (jpg, png, jpeg), max size 2048 KB
+    - `website`: Nullable, valid URL
+  - User Data:
+    - `name`: String
+    - `email`: String
+    - `password`: String
+    - `password_confirmation`: String
+    - `role`: String (should be 'school' or non-admin role)
+
+### Update School
+
+- **URL:** `/api/schools/{id}`
+- **Method:** `PUT/PATCH`
+- **Description:** Update an existing school
+- **Authentication:** Required (Bearer Token)
+
+### Delete School
+
+- **URL:** `/api/schools/{id}`
+- **Method:** `DELETE`
+- **Description:** Delete a school
+- **Authentication:** Required (Bearer Token)
+
+### Search Schools
+
+- **URL:** `/api/schools/search`
+- **Method:** `POST`
+- **Description:** Search for schools based on various criteria
+- **Authentication:** Required (Bearer Token)
+- **Request Body:**
+  - `title` (optional): String
+  - `address` (optional): String
+  - `phone_number` (optional): String
+  - `website` (optional): URL
+  - `founding_year` (optional): Integer (between 1800 and current year)
+  - `student_capacity` (optional): Integer (minimum 1)
+- **Response:** Returns a list of schools matching the search criteria
+
+## Teachers and Students
+
+These routes are yet to be implemented. They will be accessible under the following prefixes:
+
+- Teachers: `/api/teachers`
+- Students: `/api/students`
+
+All these routes will require authentication using Bearer tokens.
+
+## General Notes
+
+1. All protected routes require a valid Bearer token obtained through the login process.
+2. The Bearer token should be included in the Authorization header for all protected routes.
+3. All responses will be in JSON format.
+4. Errors will include appropriate HTTP status codes and error messages in the response body.
+5. Only admin users can register new users through the `/api/register` endpoint.
+6. User update and delete operations are restricted to admin users only.
+
+For more detailed information about request and response formats, please refer to the API specification or contact the development team.
