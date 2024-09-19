@@ -13,7 +13,7 @@ class TeacherResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'photo' => $this->photo,
+            'photo' => $this->photo ? asset('storage/' . $this->photo) : null,
             'phone_number' => $this->phone_number,
             'bio' => $this->bio,
             'email' => $this->email,

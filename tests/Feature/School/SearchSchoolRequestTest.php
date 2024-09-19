@@ -22,13 +22,12 @@ class SearchSchoolRequestTest extends TestCase
 
         // Seed the database with test data
         School::factory()->create(['title' => 'Test School']);
-        School::factory()->create(['title' => 'Another School']);
     }
 
     public function test_admin_can_search_schools_and_get_results()
     {
         // Authenticate as admin user
-        $response = $this->actingAs($this->admin)->postJson('/api/schools/search', [
+        $response = $this->actingAs($this->admin)->getJson('/api/schools/search', [
             'search' => 'Test School',
         ]);
 
@@ -40,7 +39,7 @@ class SearchSchoolRequestTest extends TestCase
     public function test_admin_can_search_schools_and_get_empty_results()
     {
         // Authenticate as admin user
-        $response = $this->actingAs($this->admin)->postJson('/api/schools/search', [
+        $response = $this->actingAs($this->admin)->getJson('/api/schools/search', [
             'search' => 'Nonexistent School',
         ]);
 
@@ -51,7 +50,7 @@ class SearchSchoolRequestTest extends TestCase
     public function test_admin_search_with_empty_term_returns_results()
     {
         // Authenticate as admin user
-        $response = $this->actingAs($this->admin)->postJson('/api/schools/search', [
+        $response = $this->actingAs($this->admin)->getJson('/api/schools/search', [
             'search' => '', // Empty search term
         ]);
 

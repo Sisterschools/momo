@@ -29,7 +29,7 @@ class SchoolController extends Controller
     {
         $this->authorize('create', School::class);
 
-       
+
 
         DB::beginTransaction();
 
@@ -37,14 +37,22 @@ class SchoolController extends Controller
 
             // Create the user first
             $userData = $request->only(['name', 'email', 'password', 'role']);
-            $userData['role'] = 'student';
+            $userData['role'] = 'school';
             $user = User::create($userData);
 
-            
+
             // Create the school
-            $schoolData = $request->only(['title', 'photo', 'address', 'description',
-            'phone_number', 'website', 'founding_year', 'student_capacity']);
-            $school = Student::create($schoolData);
+            $schoolData = $request->only([
+                'title',
+                'photo',
+                'address',
+                'description',
+                'phone_number',
+                'website',
+                'founding_year',
+                'student_capacity'
+            ]);
+            $school = School::create($schoolData);
 
 
             $school->user()->save($user);
@@ -88,8 +96,8 @@ class SchoolController extends Controller
 
     public function search(SearchSchoolRequest $request)
     {
-        $term = $request->input('search');
-        $schools = School::search($term)->get();
+        $term = $request->query('search');
+        $schools = School::search($term)->paginate(10)->appends(['search' => $term]); // Paginate search results with 10 items per page
 
         return SchoolResource::collection($schools);
     }

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Events\UserRegisteredEvent;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Resources\TeacherResource;
+use App\Http\Requests\Teacher\SearchTeacherRequest;
 
 class TeacherController extends Controller
 {
@@ -56,5 +57,13 @@ class TeacherController extends Controller
 
             return response()->json(['message' => 'Error creating teacher', 'errors' => $e->getMessage()], 500);
         }
+    }
+
+    public function search(SearchTeacherRequest $request)
+    {
+        $term = $request->query('search');
+        $teachers = Teacher::search($term)->paginate(10)->appends(['search' => $term]);
+
+        return TeacherResource::collection($teachers);
     }
 }

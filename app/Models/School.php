@@ -54,6 +54,7 @@ class School extends Model
         });
     }
 
+    // Scope a query to search for schools by title, address, or phone number.
     public function scopeSearch(Builder $query, $term)
     {
         return $query->where('title', 'like', "%{$term}%")

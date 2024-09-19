@@ -11,11 +11,11 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class StudentTest extends TestCase
+class StudentFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_creates_a_student_with_a_user_and_assigns_to_schools()
+    public function test_admin_can_creates_a_student_with_a_user_and_assigns_to_schools()
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
@@ -49,7 +49,7 @@ class StudentTest extends TestCase
         $this->assertDatabaseHas('school_student', ['student_id' => Student::first()->id, 'school_id' => $school2->id]);
     }
 
-    public function test_requires_valid_school_ids_when_creating_a_student()
+    public function test_admin_requires_valid_school_ids_when_creating_a_student()
     {
         $admin = User::factory()->create(['role' => 'admin']);
 

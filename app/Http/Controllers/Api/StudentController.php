@@ -10,10 +10,19 @@ use Illuminate\Support\Facades\DB;
 use App\Events\UserRegisteredEvent;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Resources\StudentResource;
+use App\Http\Requests\Student\SearchStudentRequest;
 
 class StudentController extends Controller
 {
     use AuthorizesRequests;
+
+    public function index()
+    {
+        // $this->authorize('viewAny', Teacher::class);
+        $students = Student::paginate(10);
+        return StudentResource::collection($students);
+    }
+
     public function store(StoreStudentRequest $request)
     {
 
@@ -47,5 +56,13 @@ class StudentController extends Controller
 
             return response()->json(['message' => 'Error creating student', 'errors' => $e->getMessage()], 500);
         }
+    }
+
+    public function search(SearchStudentRequest $request)
+    {
+        $term = $request->query('search');
+        $students = Student::search($term)->paginate(10)->appends(['search' => $term]);
+
+        return StudentResource::collection($students);
     }
 }

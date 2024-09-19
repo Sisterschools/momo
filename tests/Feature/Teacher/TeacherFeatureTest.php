@@ -10,11 +10,11 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class TeacherTest extends TestCase
+class TeacherFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_admin_creates_a_teacher_with_a_user_and_assigns_to_schools()
+    public function test_admin_can_creates_a_teacher_with_a_user_and_assigns_to_schools()
     {
         $admin = User::factory()->create(['role' => 'admin']);
         Storage::fake('public');

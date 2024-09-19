@@ -41,14 +41,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('users', UserController::class);
 
     // School routes 
+    Route::get('schools/search', [SchoolController::class, 'search']);
     Route::resource('schools', SchoolController::class);
-    Route::post('schools/search', [SchoolController::class, 'search']);
 
 
 
     // Teacher routes
+    Route::get('teachers/search', [TeacherController::class, 'search']);
     Route::resource('teachers', TeacherController::class);
 
     // Student routes
+    Route::get('students/search', [StudentController::class, 'search']);
     Route::resource('students', StudentController::class);
+
 });

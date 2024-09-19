@@ -13,7 +13,7 @@ class StudentResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'photo' => $this->photo,
+            'photo' => $this->photo ? asset('storage/' . $this->photo) : null,
             'email' => $this->email,
             'school_ids' => $this->schools->pluck('id'), // Assuming `schools` is a relationship on `Student`
             // Include user data
