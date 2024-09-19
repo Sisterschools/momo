@@ -31,6 +31,18 @@ class School extends Model
         return $this->morphOne(User::class, 'profile');
     }
 
+    // Many-to-Many Relationship with Teachers
+    public function teachers()
+    {
+        return $this->belongsToMany(Teacher::class);
+    }
+
+    // Many-to-Many Relationship with Students
+    public function students()
+    {
+        return $this->belongsToMany(Student::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

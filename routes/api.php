@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\SchoolController;
+use App\Http\Controllers\Api\TeacherController;
+use App\Http\Controllers\Api\StudentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -44,13 +46,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
-    // Teacher routes (to be implemented)
-    Route::prefix('teachers')->group(function () {
-        // Add teacher-related routes
-    });
+    // Teacher routes
+    Route::resource('teachers', TeacherController::class);
 
-    // Student routes (to be implemented)
-    Route::prefix('students')->group(function () {
-        // Add student-related routes
-    });
+    // Student routes
+    Route::resource('students', StudentController::class);
 });

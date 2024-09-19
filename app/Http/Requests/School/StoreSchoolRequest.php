@@ -22,7 +22,13 @@ class StoreSchoolRequest extends FormRequest
             'website' => 'nullable|url',
             'founding_year' => 'nullable|integer|min:1800|max:' . date('Y'),
             'student_capacity' => 'nullable|integer|min:1',
-            'role' => 'required|string|in:school', // Ensure user role is 'school'
+
+             // Validation for the User model
+             'email' => 'required|string|email|max:255|unique:users',
+             'password' => 'required|string|min:8|confirmed',
+ 
+             // Role validation (ensure it is always 'school')
+            'role' => 'required|string|in:school',
 
         ];
     }

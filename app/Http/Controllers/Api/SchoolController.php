@@ -25,30 +25,41 @@ class SchoolController extends Controller
         return SchoolResource::collection($schools);
     }
 
-    public function store(StoreSchoolRequest $schoolRequest, RegisterUserRequest $userRequest)
+    public function store(StoreSchoolRequest $request)
     {
         $this->authorize('create', School::class);
 
-        $schoolData = $schoolRequest->validated();
-        $userData = $userRequest->validated();
+       
 
         DB::beginTransaction();
 
         try {
-            $school = School::create($schoolData);
+
+            // Create the user first
+            $userData = $request->only(['name', 'email', 'password', 'role']);
+            $userData['role'] = 'student';
             $user = User::create($userData);
+
+            
+            // Create the school
+            $schoolData = $request->only(['title', 'photo', 'address', 'description',
+            'phone_number', 'website', 'founding_year', 'student_capacity']);
+            $school = Student::create($schoolData);
+
+
             $school->user()->save($user);
+            event(new UserRegisteredEvent($user, $userData['password']));
 
             DB::commit();
-
-            event(new UserRegisteredEvent($user, $userData['password']));
 
             return SchoolResource::make($school);
 
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['message' => 'Error creating school and user',
-            'errors' => $e->getMessage()], 500);
+            return response()->json([
+                'message' => 'Error creating school and user',
+                'errors' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -64,7 +75,7 @@ class SchoolController extends Controller
         $school->update($request->validated());
         return response()->json([
             'message' => 'School updated successfully.',
-            'data' =>  SchoolResource::make($school)
+            'data' => SchoolResource::make($school)
         ]);
     }
 
