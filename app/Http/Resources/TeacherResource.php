@@ -17,7 +17,7 @@ class TeacherResource extends JsonResource
             'phone_number' => $this->phone_number,
             'bio' => $this->bio,
             'email' => $this->email,
-            // 'school_ids' => $this->schools->pluck('id'), // Assuming `schools` is a relationship on `Teacher`
+            'school_ids' => $this->schools->pluck('id'), // Assuming `schools` is a relationship on `Teacher`
             // Include user data
             'user' => $this->user ? [
                 'id' => $this->user->id,

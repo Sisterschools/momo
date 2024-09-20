@@ -11,6 +11,7 @@ use App\Events\UserRegisteredEvent;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Resources\TeacherResource;
 use App\Http\Requests\Teacher\SearchTeacherRequest;
+use App\Http\Requests\Teacher\UpdateTeacherRequest;
 
 class TeacherController extends Controller
 {
@@ -21,6 +22,11 @@ class TeacherController extends Controller
         // $this->authorize('viewAny', Teacher::class);
         $teachers = Teacher::paginate(10);
         return TeacherResource::collection($teachers);
+    }
+
+    public function show(Teacher $teacher)
+    {
+        return TeacherResource::make($teacher);
     }
 
     public function store(StoreTeacherRequest $request)
@@ -57,6 +63,23 @@ class TeacherController extends Controller
 
             return response()->json(['message' => 'Error creating teacher', 'errors' => $e->getMessage()], 500);
         }
+    }
+
+    public function update(UpdateTeacherRequest $request, Teacher $teacher)
+    {
+        $this->authorize('update', $teacher);
+        $teacher->update($request->validated());
+        return response()->json([
+            'message' => 'Teacher updated successfully.',
+            'data' => TeacherResource::make($teacher)
+        ]);
+    }
+
+    public function destroy(Teacher $teacher)
+    {
+        $this->authorize('delete', $teacher);
+        $teacher->delete();
+        return response()->json(null, 204);
     }
 
     public function search(SearchTeacherRequest $request)

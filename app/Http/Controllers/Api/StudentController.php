@@ -11,6 +11,7 @@ use App\Events\UserRegisteredEvent;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Resources\StudentResource;
 use App\Http\Requests\Student\SearchStudentRequest;
+use App\Http\Requests\Student\UpdateStudentRequest;
 
 class StudentController extends Controller
 {
@@ -23,8 +24,14 @@ class StudentController extends Controller
         return StudentResource::collection($students);
     }
 
+    public function show(Student $student)
+    {
+        return StudentResource::make($student);
+    }
+
     public function store(StoreStudentRequest $request)
     {
+        $this->authorize('create', Student::class);
 
         DB::beginTransaction();
 
@@ -56,6 +63,23 @@ class StudentController extends Controller
 
             return response()->json(['message' => 'Error creating student', 'errors' => $e->getMessage()], 500);
         }
+    }
+
+    public function update(UpdateStudentRequest $request, Student $student)
+    {
+        $this->authorize('update', $student);
+        $student->update($request->validated());
+        return response()->json([
+            'message' => 'Student updated successfully.',
+            'data' => StudentResource::make($student)
+        ]);
+    }
+
+    public function destroy(Student $student)
+    {
+        $this->authorize('delete', $student);
+        $student->delete();
+        return response()->json(null, 204);
     }
 
     public function search(SearchStudentRequest $request)
