@@ -142,25 +142,21 @@ All routes in this section require authentication. Some operations are restricte
 
 
 ## Schools
-
 All routes in this section require authentication using Bearer tokens.
 
 ### List Schools
-
 - **URL:** `/api/schools`
 - **Method:** `GET`
 - **Description:** Retrieve a list of schools
 - **Authentication:** Required (Bearer Token)
 
 ### Get School
-
 - **URL:** `/api/schools/{id}`
 - **Method:** `GET`
 - **Description:** Retrieve details of a specific school
 - **Authentication:** Required (Bearer Token)
 
 ### Create School
-
 - **URL:** `/api/schools`
 - **Method:** `POST`
 - **Description:** Create a new school
@@ -183,50 +179,126 @@ All routes in this section require authentication using Bearer tokens.
     - `role`: String (should be 'school' or non-admin role)
 
 ### Update School
-
 - **URL:** `/api/schools/{id}`
 - **Method:** `PUT/PATCH`
 - **Description:** Update an existing school
 - **Authentication:** Required (Bearer Token)
 
 ### Delete School
-
 - **URL:** `/api/schools/{id}`
 - **Method:** `DELETE`
 - **Description:** Delete a school
 - **Authentication:** Required (Bearer Token)
 
 ### Search Schools
-
 - **URL:** `/api/schools/search`
-- **Method:** `POST`
+- **Method:** `GET`
 - **Description:** Search for schools based on various criteria
 - **Authentication:** Required (Bearer Token)
 - **Request Body:**
-  - `title` (optional): String
-  - `address` (optional): String
-  - `phone_number` (optional): String
-  - `website` (optional): URL
-  - `founding_year` (optional): Integer (between 1800 and current year)
-  - `student_capacity` (optional): Integer (minimum 1)
+  - `search` (optional): String
 - **Response:** Returns a list of schools matching the search criteria
 
-## Teachers and Students
+## Students
+All routes in this section require authentication using Bearer tokens.
 
-These routes are yet to be implemented. They will be accessible under the following prefixes:
+### List Students
+- **URL:** `/api/students`
+- **Method:** `GET`
+- **Description:** Retrieve a list of students
+- **Authentication:** Required (Bearer Token)
 
-- Teachers: `/api/teachers`
-- Students: `/api/students`
+### Get Student
+- **URL:** `/api/students/{id}`
+- **Method:** `GET`
+- **Description:** Retrieve details of a specific student
+- **Authentication:** Required (Bearer Token)
 
-All these routes will require authentication using Bearer tokens.
+### Create Student
+- **URL:** `/api/students`
+- **Method:** `POST`
+- **Description:** Create a new student
+- **Authentication:** Required (Bearer Token)
+- **Required Fields:**
+  - `name`: String (max 255 characters)
+  - `photo`: Nullable, image file (jpg, png, jpeg), max size 2048 KB
+  - `email`: String, valid email (max 255 characters, unique in users table)
+  - `password`: String (min 8 characters)
+  - `password_confirmation`: String (must match password)
+  - `school_ids`: Array (at least one school must be selected)
+  - `school_ids.*`: Existing school ID
+  - `role`: String (must be 'student')
 
-## General Notes
+### Update Student
+- **URL:** `/api/students/{id}`
+- **Method:** `PUT/PATCH`
+- **Description:** Update an existing student
+- **Authentication:** Required (Bearer Token)
 
-1. All protected routes require a valid Bearer token obtained through the login process.
-2. The Bearer token should be included in the Authorization header for all protected routes.
-3. All responses will be in JSON format.
-4. Errors will include appropriate HTTP status codes and error messages in the response body.
-5. Only admin users can register new users through the `/api/register` endpoint.
-6. User update and delete operations are restricted to admin users only.
+### Delete Student
+- **URL:** `/api/students/{id}`
+- **Method:** `DELETE`
+- **Description:** Delete a student
+- **Authentication:** Required (Bearer Token)
 
-For more detailed information about request and response formats, please refer to the API specification or contact the development team.
+### Search Students
+- **URL:** `/api/students/search`
+- **Method:** `GET`
+- **Description:** Search for students based on name
+- **Authentication:** Required (Bearer Token)
+- **Request Body:**
+  - `search` (optional): String
+- **Response:** Returns a list of students matching the search criteria
+
+## Teachers
+All routes in this section require authentication using Bearer tokens.
+
+### List Teachers
+- **URL:** `/api/teachers`
+- **Method:** `GET`
+- **Description:** Retrieve a list of teachers
+- **Authentication:** Required (Bearer Token)
+
+### Get Teacher
+- **URL:** `/api/teachers/{id}`
+- **Method:** `GET`
+- **Description:** Retrieve details of a specific teacher
+- **Authentication:** Required (Bearer Token)
+
+### Create Teacher
+- **URL:** `/api/teachers`
+- **Method:** `POST`
+- **Description:** Create a new teacher
+- **Authentication:** Required (Bearer Token)
+- **Required Fields:**
+  - `name`: String (max 255 characters)
+  - `photo`: Nullable, image file (jpg, png, jpeg), max size 2048 KB
+  - `phone_number`: Nullable, String (max 20 characters)
+  - `bio`: Nullable, String
+  - `email`: String, valid email (max 255 characters, unique in users table)
+  - `password`: String (min 8 characters)
+  - `password_confirmation`: String (must match password)
+  - `school_ids`: Array (at least one school must be selected)
+  - `school_ids.*`: Existing school ID
+  - `role`: String (must be 'teacher')
+
+### Update Teacher
+- **URL:** `/api/teachers/{id}`
+- **Method:** `PUT/PATCH`
+- **Description:** Update an existing teacher
+- **Authentication:** Required (Bearer Token)
+
+### Delete Teacher
+- **URL:** `/api/teachers/{id}`
+- **Method:** `DELETE`
+- **Description:** Delete a teacher
+- **Authentication:** Required (Bearer Token)
+
+### Search Teachers
+- **URL:** `/api/teachers/search`
+- **Method:** `GET`
+- **Description:** Search for teachers based on name
+- **Authentication:** Required (Bearer Token)
+- **Request Body:**
+  - `search` (optional): String
+- **Response:** Returns a list of teachers matching the search criteria
