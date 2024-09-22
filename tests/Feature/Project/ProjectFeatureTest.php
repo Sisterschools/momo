@@ -15,6 +15,23 @@ class ProjectFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $project;
+    protected $program;
+    protected $student;
+    protected $admin;
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->admin = User::factory()->create(['role' => 'admin']);
+
+        // Create a project and a program
+        $this->project = Project::factory()->create();
+        $this->program = Program::factory()->create();
+        $this->student = Student::factory()->create();
+
+    }
+
     public function test_create_project()
     {
         $admin = User::factory()->create(['role' => 'admin']);
@@ -152,6 +169,7 @@ class ProjectFeatureTest extends TestCase
     public function test_attach_students_to_program()
     {
         $admin = User::factory()->create(['role' => 'admin']);
+
         // Create the necessary records
         $project = Project::factory()->create();
         $program = Program::factory()->create();
@@ -184,6 +202,49 @@ class ProjectFeatureTest extends TestCase
                 'student_id' => $student->id,
             ]);
         }
+    }
+
+
+    public function test_mark_program_as_complete()
+    {
+        $this->project->programs()->attach($this->program->id);
+
+        $response = $this->actingAs($this->admin)
+            ->patchJson(route(
+                'projects.programs.complete',
+                [$this->project->id, $this->program->id]
+            ));
+
+        $response->assertOk()
+            ->assertJson(['message' => 'Program marked as complete in the project.']);
+
+        // Assert the program is marked as complete
+        $this->assertDatabaseHas('program_project', [
+            'project_id' => $this->project->id,
+            'program_id' => $this->program->id,
+            'is_completed' => true,
+        ]);
+    }
+
+    public function test_mark_program_as_incomplete()
+    {
+        $this->project->programs()->attach($this->program->id, ['is_completed' => true]);
+
+        $response = $this->actingAs($this->admin)
+            ->patchJson(route(
+                'projects.programs.incomplete',
+                [$this->project->id, $this->program->id]
+            ));
+
+        $response->assertOk()
+            ->assertJson(['message' => 'Program marked as incomplete in the project.']);
+
+        // Assert the program is marked as incomplete
+        $this->assertDatabaseHas('program_project', [
+            'project_id' => $this->project->id,
+            'program_id' => $this->program->id,
+            'is_completed' => false,
+        ]);
     }
 
 

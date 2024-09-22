@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Project\SearchProjectRequest;
 use App\Models\Project;
 use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Requests\Project\UpdateProjectRequest;
@@ -79,4 +80,14 @@ class ProjectController extends Controller
             'attached_teacher_count' => count($teacherIds)
         ]);
     }
+
+
+    public function search(SearchProjectRequest $request)
+    {
+        $term = $request->query('search');
+        $projects = Project::search($term)->paginate(10)->appends(['search' => $term]);
+
+        return ProjectCollection::make($projects);
+    }
+
 }

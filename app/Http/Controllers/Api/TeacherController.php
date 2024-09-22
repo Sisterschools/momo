@@ -88,6 +88,6 @@ class TeacherController extends Controller
         $term = $request->query('search');
         $teachers = Teacher::search($term)->paginate(10)->appends(['search' => $term]);
 
-        return TeacherResource::collection($teachers);
+        return TeacherCollection::make($teachers);
     }
 }

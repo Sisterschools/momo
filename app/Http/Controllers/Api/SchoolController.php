@@ -100,6 +100,6 @@ class SchoolController extends Controller
         $term = $request->query('search');
         $schools = School::search($term)->paginate(10)->appends(['search' => $term]); // Paginate search results with 10 items per page
 
-        return SchoolResource::collection($schools);
+        return SchoolCollection::make($schools);
     }
 }

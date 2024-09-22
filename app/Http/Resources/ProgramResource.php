@@ -13,7 +13,7 @@ class ProgramResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'projects' => ProjectResource::collection($this->whenLoaded('projects')),
+            // 'projects' => ProjectResource::collection($this->whenLoaded('projects')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

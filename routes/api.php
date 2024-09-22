@@ -5,8 +5,10 @@ use App\Http\Controllers\Api\AuthController;
 
 // Public routes
 Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
-    Route::get('unauthenticated', 'unauthenticated')->name('login');
+    Route::post('login', 'login')
+        ->name('login');
+    Route::get('unauthenticated', 'unauthenticated')
+        ->name('unauthenticated');
 });
 
 

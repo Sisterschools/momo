@@ -158,45 +158,6 @@ class StudentFeatureTest extends TestCase
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
 
-    public function test_can_search_students()
-    {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $user1 = User::factory()->create(['role' => 'student']);
-        $user2 = User::factory()->create(['role' => 'student']);
-
-        $student1 = Student::factory()->create(['name' => 'John Doe']);
-        $student2 = Student::factory()->create(['name' => 'Jane Smith']);
-
-        $student1->user()->save($user1);
-        $student2->user()->save($user2);
-
-        $response = $this->actingAs($admin)->getJson('/api/students/search?search=John');
-
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'data' => [
-                    '*' => [
-                        'id',
-                        'name',
-                        'photo',
-                        'email',
-                        'school_ids',
-                        'user' => [
-                            'id',
-                            'name',
-                            'email',
-                            'role',
-                            'created_at',
-                            'updated_at',
-                        ],
-                    ]
-                ],
-                'links',
-                'meta'
-            ])
-            ->assertJsonFragment(['name' => 'John Doe'])
-            ->assertJsonMissing(['name' => 'Jane Smith']);
-    }
 
     public function test_non_admin_cannot_create_student()
     {

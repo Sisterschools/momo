@@ -37,7 +37,7 @@ class Student extends Model
         });
     }
 
-    // Scope a query to search for schools by title, address, or phone number.
+    // Scope a query to search for students by name
     public function scopeSearch(Builder $query, $term)
     {
         return $query->where('name', 'like', "%{$term}%");

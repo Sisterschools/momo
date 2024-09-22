@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Program\SearchProgramRequest;
 use App\Models\Program;
 use App\Http\Requests\Program\StoreProgramRequest;
 use App\Http\Requests\Program\UpdateProgramRequest;
 use App\Http\Resources\ProgramResource;
 use App\Http\Resources\ProgramCollection;
 use App\Http\Resources\ProjectResource;
+use App\Http\Resources\ProjectCollection;
+
 use Illuminate\Http\JsonResponse;
+
 
 class ProgramController extends Controller
 {
@@ -43,13 +47,30 @@ class ProgramController extends Controller
 
     public function projects(Program $program)
     {
-        return ProjectResource::collection($program->projects);
+
+        // Paginate the projects related to the program (you can set the number of items per page)
+        $projects = $program->projects()->paginate(10);
+        // Return paginated ProjectResource collection
+        return ProjectCollection::make($projects);
+
 
     }
 
     public function completedProjects(Program $program)
     {
-        $completedProjects = $program->projects()->wherePivot('is_completed', true)->get();
-        return ProjectResource::collection($completedProjects);
+        $completedProjects = $program->projects()
+            ->wherePivot('is_completed', true)->paginate(10);
+
+        return ProjectCollection::make($completedProjects);
     }
+
+    public function search(SearchProgramRequest $request)
+    {
+        $term = $request->query('search');
+        $programs = Program::search($term)->paginate(10)->appends(['search' => $term]);
+
+        return ProgramCollection::make($programs);
+    }
+
+
 }

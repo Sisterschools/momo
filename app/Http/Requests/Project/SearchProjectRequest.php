@@ -1,9 +1,9 @@
 <?php
-namespace App\Http\Requests\Student;
+namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SearchStudentRequest extends FormRequest
+class SearchProjectRequest extends FormRequest
 {
     public function authorize(): bool
     {

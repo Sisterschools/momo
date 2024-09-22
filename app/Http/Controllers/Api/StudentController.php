@@ -89,6 +89,6 @@ class StudentController extends Controller
         $term = $request->query('search');
         $students = Student::search($term)->paginate(10)->appends(['search' => $term]);
 
-        return StudentResource::collection($students);
+        return StudentCollection::make($students);
     }
 }

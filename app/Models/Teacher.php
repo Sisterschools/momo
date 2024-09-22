@@ -40,7 +40,7 @@ class Teacher extends Model
         });
     }
 
-    // Scope a query to search for schools by title, address, or phone number.
+    // Scope a query to search for teachers name.
     public function scopeSearch(Builder $query, $term)
     {
         return $query->where('name', 'like', "%{$term}%");
