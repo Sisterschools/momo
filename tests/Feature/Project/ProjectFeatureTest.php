@@ -226,26 +226,26 @@ class ProjectFeatureTest extends TestCase
         ]);
     }
 
-    // public function test_mark_program_as_incomplete()
-    // {
-    //     $this->project->programs()->attach($this->program->id, ['is_completed' => true]);
+    public function test_mark_program_as_incomplete()
+    {
+        $this->project->programs()->attach($this->program->id, ['is_completed' => true]);
 
-    //     $response = $this->actingAs($this->admin)
-    //         ->patchJson(route(
-    //             'projects.programs.incomplete',
-    //             [$this->project->id, $this->program->id]
-    //         ));
+        $response = $this->actingAs($this->admin)
+            ->patchJson(route(
+                'projects.programs.incomplete',
+                [$this->project->id, $this->program->id]
+            ));
 
-    //     $response->assertOk()
-    //         ->assertJson(['message' => 'Program marked as incomplete in the project.']);
+        $response->assertOk()
+            ->assertJson(['message' => 'Program marked as incomplete in the project.']);
 
-    //     // Assert the program is marked as incomplete
-    //     $this->assertDatabaseHas('program_project', [
-    //         'project_id' => $this->project->id,
-    //         'program_id' => $this->program->id,
-    //         'is_completed' => false,
-    //     ]);
-    // }
+        // Assert the program is marked as incomplete
+        $this->assertDatabaseHas('program_project', [
+            'project_id' => $this->project->id,
+            'program_id' => $this->program->id,
+            'is_completed' => false,
+        ]);
+    }
 
 
 }
