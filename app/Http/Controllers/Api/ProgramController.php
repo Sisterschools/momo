@@ -10,12 +10,12 @@ use App\Http\Resources\ProgramResource;
 use App\Http\Resources\ProgramCollection;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\ProjectCollection;
-
-use Illuminate\Http\JsonResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 
 class ProgramController extends Controller
 {
+    use AuthorizesRequests; // Add this line to import the trait
 
     public function index()
     {
@@ -26,6 +26,8 @@ class ProgramController extends Controller
 
     public function store(StoreProgramRequest $request)
     {
+        $this->authorize('create', Program::class);
+
         $program = Program::create($request->validated());
         return ProgramResource::make($program);
     }
@@ -37,12 +39,16 @@ class ProgramController extends Controller
 
     public function update(UpdateProgramRequest $request, Program $program)
     {
+        $this->authorize('update', $program);
+
         $program->update($request->validated());
         return ProgramResource::make($program);
     }
 
     public function destroy(Program $program)
     {
+        $this->authorize('delete', $program);
+
         $program->delete();
         return response()->json(null, 204);
     }

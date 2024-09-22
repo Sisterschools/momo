@@ -13,9 +13,12 @@ use App\Http\Resources\ProjectCollection;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\Project\AttachStudentsToProjectRequest;
 use App\Http\Requests\Project\AttachTeachersToProjectRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProjectController extends Controller
 {
+    use AuthorizesRequests; // Add this line to import the trait
+
     public function index()
     {
         $projects = Project::paginate();
@@ -24,6 +27,8 @@ class ProjectController extends Controller
 
     public function store(StoreProjectRequest $request)
     {
+        $this->authorize('create', Project::class);
+
         $project = Project::create($request->validated());
         return ProjectResource::make($project);
     }
@@ -40,12 +45,16 @@ class ProjectController extends Controller
 
     public function update(UpdateProjectRequest $request, Project $project)
     {
+        $this->authorize('update', $project);
+
         $project->update($request->validated());
         return ProjectResource::make($project);
     }
 
     public function destroy(Project $project)
     {
+        $this->authorize('delete', $project);
+
         $project->delete();
         return response()->json(null, 204);
 
@@ -53,6 +62,8 @@ class ProjectController extends Controller
 
     public function attachStudentsToProject(AttachStudentsToProjectRequest $request, Project $project)
     {
+        $this->authorize('create', Project::class);
+
         // Validate data
         $studentIds = $request->validated()['student_ids'];
 
@@ -68,6 +79,8 @@ class ProjectController extends Controller
 
     public function attachTeachersToProject(AttachTeachersToProjectRequest $request, Project $project)
     {
+        $this->authorize('create', Project::class);
+
         // Validate data
         $teacherIds = $request->validated()['teacher_ids'];
 

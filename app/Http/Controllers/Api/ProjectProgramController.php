@@ -19,6 +19,9 @@ class ProjectProgramController extends Controller
         Project $project,
         Program $program
     ): JsonResponse {
+
+        $this->authorize('create', Project::class);
+
         // Ensure the program is attached to the project
         $studentIds = $request->validated()['student_ids'];
 
@@ -36,18 +39,23 @@ class ProjectProgramController extends Controller
 
     public function attach(AttachProgramProjectRequest $request, Project $project, Program $program): JsonResponse
     {
+        $this->authorize('create', Project::class);
+
         $project->programs()->attach($program->id);
         return response()->json(['message' => 'Program attached to the project successfully.']);
     }
 
     public function detach(Project $project, Program $program): JsonResponse
     {
+        $this->authorize('create', Project::class);
+
         $project->programs()->detach($program->id);
         return response()->json(['message' => 'Program detached from the project successfully.']);
     }
 
     public function markAsComplete(Project $project, Program $program): JsonResponse
     {
+
         $project->programs()->updateExistingPivot($program->id, [
             'is_completed' => true,
             'completed_at' => now(),
