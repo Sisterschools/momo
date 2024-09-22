@@ -45,4 +45,9 @@ class Teacher extends Model
     {
         return $query->where('name', 'like', "%{$term}%");
     }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
 }

@@ -61,4 +61,10 @@ class School extends Model
             ->orWhere('address', 'like', "%{$term}%")
             ->orWhere('phone_number', 'like', "%{$term}%");
     }
+
+    public function allProjects()
+    {
+        return Project::where('school_id_1', $this->id)
+            ->orWhere('school_id_2', $this->id);
+    }
 }

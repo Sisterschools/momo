@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\User\UpdateUserRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Http\Resources\UserCollection;
 
 
 class UserController extends Controller
@@ -20,7 +19,7 @@ class UserController extends Controller
     {
 
         $users = User::paginate(10);
-        return UserResource::collection($users);
+        return UserCollection::make($users);
     }
 
     // Show a single user

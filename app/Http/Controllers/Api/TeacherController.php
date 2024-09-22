@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Resources\TeacherResource;
 use App\Http\Requests\Teacher\SearchTeacherRequest;
 use App\Http\Requests\Teacher\UpdateTeacherRequest;
+use App\Http\Resources\TeacherCollection;
 
 class TeacherController extends Controller
 {
@@ -21,7 +22,7 @@ class TeacherController extends Controller
     {
         // $this->authorize('viewAny', Teacher::class);
         $teachers = Teacher::paginate(10);
-        return TeacherResource::collection($teachers);
+        return TeacherCollection::make($teachers);
     }
 
     public function show(Teacher $teacher)

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Teacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 class TeacherFactory extends Factory
 {
@@ -16,6 +17,7 @@ class TeacherFactory extends Factory
             'photo' => null,  // You can set this when testing file uploads
             'phone_number' => $this->faker->phoneNumber,
             'bio' => $this->faker->paragraph,
+
         ];
     }
 }

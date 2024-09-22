@@ -11,6 +11,7 @@ use App\Http\Requests\School\UpdateSchoolRequest;
 use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Requests\School\SearchSchoolRequest;
 use App\Http\Resources\SchoolResource;
+use App\Http\Resources\SchoolCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -22,7 +23,7 @@ class SchoolController extends Controller
     {
         $this->authorize('viewAny', School::class);
         $schools = School::paginate(10);
-        return SchoolResource::collection($schools);
+        return SchoolCollection::make($schools);
     }
 
     public function store(StoreSchoolRequest $request)

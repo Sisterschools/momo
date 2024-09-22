@@ -42,4 +42,17 @@ class Student extends Model
     {
         return $query->where('name', 'like', "%{$term}%");
     }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
+
+
+    public function projectPrograms()
+    {
+        return $this->belongsToMany(Program::class, 'project_program_student')
+            ->withPivot('project_id');
+    }
+
 }
