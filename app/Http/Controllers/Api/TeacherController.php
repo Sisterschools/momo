@@ -21,7 +21,7 @@ class TeacherController extends Controller
     public function index()
     {
         // $this->authorize('viewAny', Teacher::class);
-        $teachers = Teacher::paginate(10);
+        $teachers = Teacher::paginate();
         return TeacherCollection::make($teachers);
     }
 
@@ -86,7 +86,7 @@ class TeacherController extends Controller
     public function search(SearchTeacherRequest $request)
     {
         $term = $request->query('search');
-        $teachers = Teacher::search($term)->paginate(10)->appends(['search' => $term]);
+        $teachers = Teacher::search($term)->paginate()->appends(['search' => $term]);
 
         return TeacherCollection::make($teachers);
     }

@@ -22,7 +22,7 @@ class SchoolController extends Controller
     public function index()
     {
         $this->authorize('viewAny', School::class);
-        $schools = School::paginate(10);
+        $schools = School::paginate();
         return SchoolCollection::make($schools);
     }
 
@@ -98,7 +98,7 @@ class SchoolController extends Controller
     public function search(SearchSchoolRequest $request)
     {
         $term = $request->query('search');
-        $schools = School::search($term)->paginate(10)->appends(['search' => $term]); // Paginate search results with 10 items per page
+        $schools = School::search($term)->paginate()->appends(['search' => $term]); // Paginate search results with 10 items per page
 
         return SchoolCollection::make($schools);
     }

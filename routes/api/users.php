@@ -11,5 +11,6 @@ Route::middleware('auth:sanctum')->group(function () {
         ->name('users.password.update');
     Route::get('/users/roles', [UserController::class, 'getRoles'])
         ->name('users.roles');
-    Route::resource('users', UserController::class);
+
+    Route::apiResource('users', UserController::class);
 });

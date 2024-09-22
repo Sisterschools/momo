@@ -16,9 +16,11 @@ use Illuminate\Http\JsonResponse;
 
 class ProgramController extends Controller
 {
+
     public function index()
     {
-        $programs = Program::paginate(10);
+
+        $programs = Program::paginate();
         return ProgramCollection::make($programs);
     }
 
@@ -49,7 +51,7 @@ class ProgramController extends Controller
     {
 
         // Paginate the projects related to the program (you can set the number of items per page)
-        $projects = $program->projects()->paginate(10);
+        $projects = $program->projects()->paginate();
         // Return paginated ProjectResource collection
         return ProjectCollection::make($projects);
 
@@ -59,7 +61,7 @@ class ProgramController extends Controller
     public function completedProjects(Program $program)
     {
         $completedProjects = $program->projects()
-            ->wherePivot('is_completed', true)->paginate(10);
+            ->wherePivot('is_completed', true)->paginate();
 
         return ProjectCollection::make($completedProjects);
     }
@@ -67,7 +69,7 @@ class ProgramController extends Controller
     public function search(SearchProgramRequest $request)
     {
         $term = $request->query('search');
-        $programs = Program::search($term)->paginate(10)->appends(['search' => $term]);
+        $programs = Program::search($term)->paginate()->appends(['search' => $term]);
 
         return ProgramCollection::make($programs);
     }

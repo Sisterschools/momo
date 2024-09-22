@@ -18,7 +18,7 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::with(['school1', 'school2'])->paginate(10);
+        $projects = Project::paginate();
         return ProjectCollection::make($projects);
     }
 
@@ -85,7 +85,7 @@ class ProjectController extends Controller
     public function search(SearchProjectRequest $request)
     {
         $term = $request->query('search');
-        $projects = Project::search($term)->paginate(10)->appends(['search' => $term]);
+        $projects = Project::search($term)->paginate()->appends(['search' => $term]);
 
         return ProjectCollection::make($projects);
     }

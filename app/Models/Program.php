@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Builder;
 class Program extends Model
 {
     use HasFactory;
+
+    protected $perPage = 10;
     protected $fillable = ['name', 'description'];
 
     public function projects(): BelongsToMany

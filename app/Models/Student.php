@@ -10,6 +10,7 @@ class Student extends Model
 {
     use HasFactory;
 
+    protected $perPage = 10;
     protected $fillable = [
         'name',
         'photo',

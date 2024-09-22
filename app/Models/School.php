@@ -10,6 +10,7 @@ class School extends Model
 {
     use HasFactory;
 
+    protected $perPage = 10;
     protected $fillable = [
         'title',
         'photo',
