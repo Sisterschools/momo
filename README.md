@@ -302,3 +302,133 @@ All routes in this section require authentication using Bearer tokens.
 - **Request Body:**
   - `search` (optional): String
 - **Response:** Returns a list of teachers matching the search criteria
+
+
+
+## Projects
+All routes in this section require authentication using Bearer tokens.
+
+### List Projects
+- **URL:** `/api/projects`
+- **Method:** `GET`
+- **Description:** Retrieve a list of projects
+- **Authentication:** Required (Bearer Token)
+
+### Create Project
+- **URL:** `/api/projects`
+- **Method:** `POST`
+- **Description:** Create a new project
+- **Authentication:** Required (Bearer Token)
+- **Body:** JSON object containing project details
+
+### Get Project
+- **URL:** `/api/projects/{id}`
+- **Method:** `GET`
+- **Description:** Retrieve details of a specific project
+- **Authentication:** Required (Bearer Token)
+
+### Update Project
+- **URL:** `/api/projects/{id}`
+- **Method:** `PUT`
+- **Description:** Update details of a specific project
+- **Authentication:** Required (Bearer Token)
+- **Body:** JSON object containing updated project details
+
+### Delete Project
+- **URL:** `/api/projects/{id}`
+- **Method:** `DELETE`
+- **Description:** Delete a specific project
+- **Authentication:** Required (Bearer Token)
+
+### List Project Programs
+- **URL:** `/api/projects/{id}/programs`
+- **Method:** `GET`
+- **Description:** Retrieve a list of programs associated with a specific project
+- **Authentication:** Required (Bearer Token)
+
+### List Completed Programs in Project
+- **URL:** `/api/projects/{id}/completed-programs`
+- **Method:** `GET`
+- **Description:** Retrieve a list of completed programs in a specific project
+- **Authentication:** Required (Bearer Token)
+
+## Programs
+All routes in this section require authentication using Bearer tokens.
+
+### List Programs
+- **URL:** `/api/programs`
+- **Method:** `GET`
+- **Description:** Retrieve a list of programs
+- **Authentication:** Required (Bearer Token)
+
+### Create Program
+- **URL:** `/api/programs`
+- **Method:** `POST`
+- **Description:** Create a new program
+- **Authentication:** Required (Bearer Token)
+- **Body:** JSON object containing program details
+
+### Get Program
+- **URL:** `/api/programs/{id}`
+- **Method:** `GET`
+- **Description:** Retrieve details of a specific program
+- **Authentication:** Required (Bearer Token)
+
+### Update Program
+- **URL:** `/api/programs/{id}`
+- **Method:** `PUT`
+- **Description:** Update details of a specific program
+- **Authentication:** Required (Bearer Token)
+- **Body:** JSON object containing updated program details
+
+### Delete Program
+- **URL:** `/api/programs/{id}`
+- **Method:** `DELETE`
+- **Description:** Delete a specific program
+- **Authentication:** Required (Bearer Token)
+
+### List Program Projects
+- **URL:** `/api/programs/{id}/projects`
+- **Method:** `GET`
+- **Description:** Retrieve a list of projects associated with a specific program
+- **Authentication:** Required (Bearer Token)
+
+### List Completed Projects for Program
+- **URL:** `/api/programs/{id}/completed-projects`
+- **Method:** `GET`
+- **Description:** Retrieve a list of projects where this program is completed
+- **Authentication:** Required (Bearer Token)
+
+## Project-Program Operations
+All routes in this section require authentication using Bearer tokens.
+
+### Attach Program to Project
+- **URL:** `/api/projects/{project_id}/programs/{program_id}`
+- **Method:** `POST`
+- **Description:** Attach a program to a project
+- **Authentication:** Required (Bearer Token)
+
+### Detach Program from Project
+- **URL:** `/api/projects/{project_id}/programs/{program_id}`
+- **Method:** `DELETE`
+- **Description:** Detach a program from a project
+- **Authentication:** Required (Bearer Token)
+
+### Mark Program as Complete in Project
+- **URL:** `/api/projects/{project_id}/programs/{program_id}/complete`
+- **Method:** `PATCH`
+- **Description:** Mark a program as complete within a project
+- **Authentication:** Required (Bearer Token)
+
+### Mark Program as Incomplete in Project
+- **URL:** `/api/projects/{project_id}/programs/{program_id}/incomplete`
+- **Method:** `PATCH`
+- **Description:** Mark a program as incomplete within a project
+- **Authentication:** Required (Bearer Token)
+
+### Attach Students to Program in Project
+- **URL:** `/api/projects/{project_id}/programs/{program_id}/students`
+- **Method:** `POST`
+- **Description:** Attach students to a program within a project
+- **Authentication:** Required (Bearer Token)
+- **Body:** JSON array of student IDs
