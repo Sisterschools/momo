@@ -205,24 +205,47 @@ class ProjectFeatureTest extends TestCase
     }
 
 
-    public function testMarkProgramAsReady()
+    public function test_updateProgramStatus()
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-
+        // Create a project and program
         $project = Project::factory()->create();
         $program = Program::factory()->create();
+
+        // Attach the program to the project with a default status
         $project->programs()->attach($program->id, ['status' => 'not ready']);
 
-        // Mark as ready
-        $response = $this->actingAs($admin)->patch(route('projects.programs.ready', [$project->id, $program->id]));
+        // Prepare the request data for a valid status update
+        $status = 'ready'; // or 'archived' / 'not ready' depending on the test case
+        $response = $this->actingAs($this->admin)->patchJson(route('projects.programs.status', [$project->id, $program->id, $status]));
 
-        $response->assertStatus(200);
+        // Assert the response status and content
+        $response->assertStatus(200)
+            ->assertJson(['message' => 'Program status updated successfully.']);
+
+        // Verify the status in the pivot table
         $this->assertDatabaseHas('program_project', [
-            'program_id' => $program->id,
             'project_id' => $project->id,
-            'status' => 'ready',
+            'program_id' => $program->id,
+            'status' => $status,
         ]);
     }
+
+    public function test_updateProgramStatus_invalid_status()
+    {
+        // Create a project and program
+        $project = Project::factory()->create();
+        $program = Program::factory()->create();
+
+        // Attempt to update with an invalid status
+        $invalidStatus = 'invalid_status'; // An invalid status
+        $response = $this->actingAs($this->admin)->patchJson(route('projects.programs.status', [$project->id, $program->id, $invalidStatus]));
+
+        // Assert the response status and content for the invalid status
+        $response->assertStatus(422)
+            ->assertJsonFragment(['errors' => ['status' => ['The status must be one of the following: not ready, ready, or archived.']]]);
+
+    }
+
 
 
     public function test_getProgramsByStatus()

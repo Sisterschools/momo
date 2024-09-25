@@ -39,6 +39,7 @@ class ProjectProgramController extends Controller
         ], 200);
     }
 
+    // Attach a program to a project
     public function attach(AttachProgramProjectRequest $request, Project $project, Program $program): JsonResponse
     {
         $this->authorize('create', Project::class);
@@ -47,6 +48,7 @@ class ProjectProgramController extends Controller
         return response()->json(['message' => 'Program attached to the project successfully.']);
     }
 
+    // Detach a program from a project
     public function detach(Project $project, Program $program): JsonResponse
     {
         $this->authorize('create', Project::class);
@@ -55,25 +57,18 @@ class ProjectProgramController extends Controller
         return response()->json(['message' => 'Program detached from the project successfully.']);
     }
 
-    public function markAsReady(Project $project, Program $program)
+    // Mark a program with a specific status (ready, not ready, archived)
+    public function updateProgramStatus(Project $project, Program $program, GetProgramsByStatusRequest $request)
     {
-        $project->programs()->updateExistingPivot($program->id, [
-            'status' => 'ready',
-            'ready_at' => now(),
-        ]);
+        // The validated status will be available here
+        $status = $request->validated()['status'];
 
-        return response()->json(['message' => 'Program marked as ready'], 200);
+        // Update the program's status in the pivot table
+        $project->programs()->updateExistingPivot($program->id, ['status' => $status]);
+
+        return response()->json(['message' => 'Program status updated successfully.']);
     }
 
-    public function markAsArchived(Project $project, Program $program)
-    {
-        $project->programs()->updateExistingPivot($program->id, [
-            'status' => 'archived',
-            'archived_at' => now(),
-        ]);
-
-        return response()->json(['message' => 'Program marked as archived'], 200);
-    }
 
 
     /**
