@@ -205,47 +205,59 @@ class ProjectFeatureTest extends TestCase
     }
 
 
-    public function test_mark_program_as_complete()
+    public function testMarkProgramAsReady()
     {
-        $this->project->programs()->attach($this->program->id);
+        $admin = User::factory()->create(['role' => 'admin']);
 
-        $response = $this->actingAs($this->admin)
-            ->patchJson(route(
-                'projects.programs.complete',
-                [$this->project->id, $this->program->id]
-            ));
+        $project = Project::factory()->create();
+        $program = Program::factory()->create();
+        $project->programs()->attach($program->id, ['status' => 'not ready']);
 
-        $response->assertOk()
-            ->assertJson(['message' => 'Program marked as complete in the project.']);
+        // Mark as ready
+        $response = $this->actingAs($admin)->patch(route('projects.programs.ready', [$project->id, $program->id]));
 
-        // Assert the program is marked as complete
+        $response->assertStatus(200);
         $this->assertDatabaseHas('program_project', [
-            'project_id' => $this->project->id,
-            'program_id' => $this->program->id,
-            'is_completed' => true,
+            'program_id' => $program->id,
+            'project_id' => $project->id,
+            'status' => 'ready',
         ]);
     }
 
-    public function test_mark_program_as_incomplete()
+
+    public function test_getProgramsByStatus()
     {
-        $this->project->programs()->attach($this->program->id, ['is_completed' => true]);
+        // Create a program and associated projects
+        $program1 = Program::factory()->create(['name' => 'Math Program']);
+        $program2 = Program::factory()->create(['name' => 'Science Program']);
+        $program3 = Program::factory()->create(['name' => 'History Program']);
 
-        $response = $this->actingAs($this->admin)
-            ->patchJson(route(
-                'projects.programs.incomplete',
-                [$this->project->id, $this->program->id]
-            ));
+        $project = Project::factory()->create();
 
-        $response->assertOk()
-            ->assertJson(['message' => 'Program marked as incomplete in the project.']);
+        // Attach the programs to the project with different statuses
+        $project->programs()->attach($program1->id, ['status' => 'not ready']);
+        $project->programs()->attach($program2->id, ['status' => 'ready']);
+        $project->programs()->attach($program3->id, ['status' => 'archived']);
 
-        // Assert the program is marked as incomplete
-        $this->assertDatabaseHas('program_project', [
-            'project_id' => $this->project->id,
-            'program_id' => $this->program->id,
-            'is_completed' => false,
-        ]);
+        // Test fetching programs by "not ready" status
+        $response = $this->actingAs($this->admin)->getJson(route('projects.programs.by-status', ['project' => $project->id, 'status' => 'not ready']));
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['name' => 'Math Program']);
+
+        // Test fetching programs by "ready" status
+        $response = $this->actingAs($this->admin)->getJson(route('projects.programs.by-status', ['project' => $project->id, 'status' => 'ready']));
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['name' => 'Science Program']);
+
+        // Test fetching programs by "archived" status
+        $response = $this->actingAs($this->admin)->getJson(route('projects.programs.by-status', ['project' => $project->id, 'status' => 'archived']));
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['name' => 'History Program']);
+
+        // Test fetching programs with an invalid status
+        $response = $this->actingAs($this->admin)->getJson(route('projects.programs.by-status', ['project' => $project->id, 'status' => 'invalid_status']));
+        $response->assertStatus(422);
+        $response->assertJsonFragment(['errors' => ['status' => ['The status must be one of the following: not ready, ready, or archived.']]]);
     }
-
 
 }

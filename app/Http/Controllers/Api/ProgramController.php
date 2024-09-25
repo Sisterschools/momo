@@ -64,14 +64,6 @@ class ProgramController extends Controller
 
     }
 
-    public function completedProjects(Program $program)
-    {
-        $completedProjects = $program->projects()
-            ->wherePivot('is_completed', true)->paginate();
-
-        return ProjectCollection::make($completedProjects);
-    }
-
     public function search(SearchProgramRequest $request)
     {
         $term = $request->query('search');

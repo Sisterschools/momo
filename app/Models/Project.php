@@ -13,6 +13,7 @@ class Project extends Model
     use HasFactory;
 
     protected $perPage = 10;
+
     protected $fillable = [
         'name',
         'description',
@@ -43,19 +44,10 @@ class Project extends Model
     public function programs(): BelongsToMany
     {
         return $this->belongsToMany(Program::class)
-            ->withPivot('is_completed', 'completed_at')
+            ->withPivot('status', 'ready_at', 'archived_at')
             ->withTimestamps();
     }
 
-
-    public function isProgramComplete(Program $program): bool
-    {
-        return $this->programs()
-            ->where('programs.id', $program->id)
-            ->first()
-            ->pivot
-            ->is_completed ?? false;
-    }
 
     public function programStudents(Program $program)
     {
@@ -64,11 +56,8 @@ class Project extends Model
             ->wherePivot('program_id', $program->id);
     }
 
-
-    // Scope a query to search for projects by name.
     public function scopeSearch(Builder $query, $term)
     {
         return $query->where('name', 'like', "%{$term}%");
     }
-
 }

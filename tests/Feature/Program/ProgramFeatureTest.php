@@ -38,19 +38,6 @@ class ProgramFeatureTest extends TestCase
             ->assertJsonCount(3, 'data'); // Assuming you're using a resource collection
     }
 
-    public function test_get_completed_projects_for_program()
-    {
-        // Mark one of the projects as completed
-        $completedProject = $this->projects->first();
-        $completedProject->programs()->updateExistingPivot($this->program->id, ['is_completed' => true]);
-
-        $response = $this->actingAs($this->admin)->getJson(route('programs.completed-projects', $this->program));
-
-        $response->assertStatus(200)
-            ->assertJsonFragment(['id' => $completedProject->id])
-            ->assertJsonCount(1, 'data'); // Should return 1 completed project
-    }
-
     public function test_create_program()
     {
         $response = $this->actingAs($this->admin)->postJson(route('programs.store'), [

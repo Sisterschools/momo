@@ -8,7 +8,9 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Requests\Project\AttachStudentsToProgramRequest;
 use App\Http\Requests\Project\AttachProgramProjectRequest;
 use Illuminate\Http\JsonResponse;
-
+use App\Http\Requests\Project\GetProgramsByStatusRequest;
+use App\Http\Resources\ProgramResource;
+use App\Http\Resources\ProgramCollection;
 
 class ProjectProgramController extends Controller
 {
@@ -53,23 +55,39 @@ class ProjectProgramController extends Controller
         return response()->json(['message' => 'Program detached from the project successfully.']);
     }
 
-    public function markAsComplete(Project $project, Program $program): JsonResponse
+    public function markAsReady(Project $project, Program $program)
     {
-
         $project->programs()->updateExistingPivot($program->id, [
-            'is_completed' => true,
-            'completed_at' => now(),
+            'status' => 'ready',
+            'ready_at' => now(),
         ]);
-        return response()->json(['message' => 'Program marked as complete in the project.']);
+
+        return response()->json(['message' => 'Program marked as ready'], 200);
     }
 
-    public function markAsIncomplete(Project $project, Program $program): JsonResponse
+    public function markAsArchived(Project $project, Program $program)
     {
         $project->programs()->updateExistingPivot($program->id, [
-            'is_completed' => false,
-            'completed_at' => null,
+            'status' => 'archived',
+            'archived_at' => now(),
         ]);
-        return response()->json(['message' => 'Program marked as incomplete in the project.']);
+
+        return response()->json(['message' => 'Program marked as archived'], 200);
+    }
+
+
+    /**
+     * Get programs by status for a specific project
+     */
+    public function getProgramsByStatus(GetProgramsByStatusRequest $request, Project $project)
+    {
+        // The status is already validated and available in the request
+        $status = $request->input('status');
+
+        // Fetch programs based on the status
+        $programs = $project->programs()->wherePivot('status', $status)->paginate();
+
+        return ProgramCollection::make($programs);
     }
 
 }
