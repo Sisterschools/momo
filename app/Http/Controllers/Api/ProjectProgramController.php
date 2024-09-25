@@ -57,7 +57,7 @@ class ProjectProgramController extends Controller
         return response()->json(['message' => 'Program detached from the project successfully.']);
     }
 
-    // Mark a program with a specific status (ready, not ready, archived)
+    // Mark a program with a specific status (ready, not_ready, archived)
     public function updateProgramStatus(Project $project, Program $program, GetProgramsByStatusRequest $request)
     {
         // The validated status will be available here

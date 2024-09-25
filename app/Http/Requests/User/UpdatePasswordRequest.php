@@ -31,14 +31,7 @@ class UpdatePasswordRequest extends FormRequest
         ];
     }
 
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
+    /// Handle a failed validation attempt.
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
@@ -47,11 +40,7 @@ class UpdatePasswordRequest extends FormRequest
         ], 422));
     }
 
-    /**
-     * Ensure the current password is correct.
-     *
-     * @return array
-     */
+    /// Attach a custom validation rule to check if the password is correct.
     public function withValidator(Validator $validator)
     {
         $validator->after(function ($validator) {

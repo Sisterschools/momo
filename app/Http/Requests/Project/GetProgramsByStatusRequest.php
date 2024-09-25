@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class GetProgramsByStatusRequest extends FormRequest
 {
@@ -20,7 +22,7 @@ class GetProgramsByStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'required|string|in:not ready,ready,archived',
+            'status' => 'required|string|in:not_ready,ready,archived',
         ];
     }
 
@@ -40,7 +42,15 @@ class GetProgramsByStatusRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'status.in' => 'The status must be one of the following: not ready, ready, or archived.',
+            'status.in' => 'The status must be one of the following: not_ready, ready, or archived.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'message' => 'Validation errors',
+            'errors' => $validator->errors()
+        ], 422));
     }
 }

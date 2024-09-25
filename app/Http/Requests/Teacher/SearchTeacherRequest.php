@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Teacher;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class SearchTeacherRequest extends FormRequest
 {
@@ -25,5 +27,14 @@ class SearchTeacherRequest extends FormRequest
             'search.string' => 'The search term must be a valid string.',
             'search.max' => 'The search term cannot exceed 255 characters.',
         ];
+    }
+
+    // Handle validation errors
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'message' => 'Validation errors',
+            'errors' => $validator->errors()
+        ], 422));
     }
 }

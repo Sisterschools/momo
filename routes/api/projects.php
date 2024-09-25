@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('projects/{project}/programs/{program}', [ProjectProgramController::class, 'detach'])
         ->name('projects.programs.detach');
 
-    // Mark a program with a specific status (ready, not ready, archived)
+    // Mark a program with a specific status (ready, not_ready, archived)
     Route::patch('projects/{project}/programs/{program}/status/{status}', [ProjectProgramController::class, 'updateProgramStatus'])
         ->name('projects.programs.status');
 

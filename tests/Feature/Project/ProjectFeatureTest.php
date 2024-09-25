@@ -212,10 +212,10 @@ class ProjectFeatureTest extends TestCase
         $program = Program::factory()->create();
 
         // Attach the program to the project with a default status
-        $project->programs()->attach($program->id, ['status' => 'not ready']);
+        $project->programs()->attach($program->id, ['status' => 'not_ready']);
 
         // Prepare the request data for a valid status update
-        $status = 'ready'; // or 'archived' / 'not ready' depending on the test case
+        $status = 'ready'; // or 'archived' / 'not_ready' depending on the test case
         $response = $this->actingAs($this->admin)->patchJson(route('projects.programs.status', [$project->id, $program->id, $status]));
 
         // Assert the response status and content
@@ -242,7 +242,7 @@ class ProjectFeatureTest extends TestCase
 
         // Assert the response status and content for the invalid status
         $response->assertStatus(422)
-            ->assertJsonFragment(['errors' => ['status' => ['The status must be one of the following: not ready, ready, or archived.']]]);
+            ->assertJsonFragment(['errors' => ['status' => ['The status must be one of the following: not_ready, ready, or archived.']]]);
 
     }
 
@@ -258,12 +258,12 @@ class ProjectFeatureTest extends TestCase
         $project = Project::factory()->create();
 
         // Attach the programs to the project with different statuses
-        $project->programs()->attach($program1->id, ['status' => 'not ready']);
+        $project->programs()->attach($program1->id, ['status' => 'not_ready']);
         $project->programs()->attach($program2->id, ['status' => 'ready']);
         $project->programs()->attach($program3->id, ['status' => 'archived']);
 
-        // Test fetching programs by "not ready" status
-        $response = $this->actingAs($this->admin)->getJson(route('projects.programs.by-status', ['project' => $project->id, 'status' => 'not ready']));
+        // Test fetching programs by "not_ready" status
+        $response = $this->actingAs($this->admin)->getJson(route('projects.programs.by-status', ['project' => $project->id, 'status' => 'not_ready']));
         $response->assertStatus(200);
         $response->assertJsonFragment(['name' => 'Math Program']);
 
@@ -280,7 +280,7 @@ class ProjectFeatureTest extends TestCase
         // Test fetching programs with an invalid status
         $response = $this->actingAs($this->admin)->getJson(route('projects.programs.by-status', ['project' => $project->id, 'status' => 'invalid_status']));
         $response->assertStatus(422);
-        $response->assertJsonFragment(['errors' => ['status' => ['The status must be one of the following: not ready, ready, or archived.']]]);
+        $response->assertJsonFragment(['errors' => ['status' => ['The status must be one of the following: not_ready, ready, or archived.']]]);
     }
 
 }

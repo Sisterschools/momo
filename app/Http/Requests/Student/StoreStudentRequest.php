@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Student;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreStudentRequest extends FormRequest
 {
@@ -37,5 +39,14 @@ class StoreStudentRequest extends FormRequest
             'school_ids.required' => 'At least one school must be selected.',
             'school_ids.*.exists' => 'Selected school does not exist.',
         ];
+    }
+
+    // Handle validation errors
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'message' => 'Validation errors',
+            'errors' => $validator->errors()
+        ], 422));
     }
 }
