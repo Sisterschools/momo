@@ -34,14 +34,7 @@ class RegisterUserRequest extends FormRequest
         ];
     }
 
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
+    /// Handle a failed validation attempt.
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([

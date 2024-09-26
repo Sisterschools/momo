@@ -11,7 +11,7 @@ class SchoolResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'photo' => $this->photo,
+            'photo' => $this->photo ? asset('storage/' . $this->photo) : null,
             'address' => $this->address,
             'description' => $this->description,
             'phone_number' => $this->phone_number,

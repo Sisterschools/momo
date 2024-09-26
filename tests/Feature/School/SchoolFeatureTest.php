@@ -17,13 +17,63 @@ class SchoolFeatureTest extends TestCase
     public function test_admin_can_view_schools_list()
     {
         $admin = User::factory()->create(['role' => 'admin']);
-        School::factory()->count(3)->create();
+
+        // Fake the storage disk for testing purposes
+        Storage::fake('public');
+
+        // Create a fake file for testing
+        $file = UploadedFile::fake()->image('school-photo2.jpg');
+
+        // Prepare the school data with a fake file
+        $schoolData = [
+            'title' => 'Test School',
+            'address' => '123 Test St',
+            'description' => 'This is a test school',
+            'phone_number' => '555-1234',
+            'website' => 'http://testschool.com',
+            'founding_year' => 2000,
+            'student_capacity' => 500,
+            'photo' => $file, // Pass the fake file as the photo
+            'name' => 'School User',
+            'email' => 'schooluser@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'role' => 'school',
+        ];
+
+
+
+
+        // Create the school with the associated user
+        $this->actingAs($admin)->postJson(
+            '/api/schools',
+            $schoolData
+        );
 
         $this->actingAs($admin)->getJson('/api/schools')
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    '*' => ['id', 'title', 'address', 'description', 'phone_number', 'website', 'founding_year', 'student_capacity', 'created_at', 'updated_at']
+                    '*' => [
+                        'id',
+                        'title',
+                        'address',
+                        'description',
+                        'phone_number',
+                        'website',
+                        'founding_year',
+                        'student_capacity',
+                        'created_at',
+                        'updated_at',
+                        'user' => [
+                            'id',
+                            'name',
+                            'email',
+                            'role',
+                            'created_at',
+                            'updated_at',
+                        ],
+                    ]
                 ]
             ]);
     }
@@ -48,9 +98,6 @@ class SchoolFeatureTest extends TestCase
             'founding_year' => 2000,
             'student_capacity' => 500,
             'photo' => $file, // Pass the fake file as the photo
-        ];
-
-        $userData = [
             'name' => 'School User',
             'email' => 'schooluser@example.com',
             'password' => 'password',
@@ -62,7 +109,7 @@ class SchoolFeatureTest extends TestCase
         // Create the school with the associated user
         $response = $this->actingAs($admin)->postJson(
             '/api/schools',
-            array_merge($schoolData, $userData)
+            $schoolData
         );
         // Assert the request was successful and get the created school ID
         $response->assertStatus(201);
@@ -122,10 +169,7 @@ class SchoolFeatureTest extends TestCase
             'phone_number' => '555-1234',
             'founding_year' => 2000,
             'student_capacity' => 1000,
-        ];
 
-        // Prepare the user data with an invalid role (e.g., 'admin')
-        $userData = [
             'name' => 'Invalid User',
             'email' => 'invaliduser@example.com',
             'password' => 'password',
@@ -136,7 +180,7 @@ class SchoolFeatureTest extends TestCase
         // Acting as an admin and attempting to create a school with a user of invalid role
         $response = $this->actingAs($admin)->postJson(
             '/api/schools',
-            array_merge($schoolData, $userData)
+            $schoolData
         );
 
         // Assert that the request is forbidden (HTTP 422 Unprocessable Entity)
@@ -147,7 +191,7 @@ class SchoolFeatureTest extends TestCase
         $this->assertDatabaseMissing('schools', ['title' => $schoolData['title']]);
 
         // Ensure that the user was not created in the database with the provided email
-        $this->assertDatabaseMissing('users', ['email' => $userData['email']]);
+        $this->assertDatabaseMissing('users', ['email' => $schoolData['email']]);
     }
 
 
@@ -164,10 +208,7 @@ class SchoolFeatureTest extends TestCase
             'phone_number' => '555-5555',
             'founding_year' => 1995,
             'student_capacity' => 800,
-        ];
 
-        // Prepare the user data for registration
-        $userData = [
             'name' => 'School User',
             'email' => 'schooluser@example.com',
             'password' => 'password',
@@ -179,7 +220,7 @@ class SchoolFeatureTest extends TestCase
         // The request should simulate separate school and user inputs
         $response = $this->actingAs($nonAdmin)->postJson(
             '/api/schools',
-            array_merge($schoolData, $userData)
+            $schoolData
         );
 
         // Assert that the request is forbidden (HTTP 403)
@@ -189,7 +230,7 @@ class SchoolFeatureTest extends TestCase
         $this->assertDatabaseMissing('schools', ['title' => $schoolData['title']]);
 
         // Ensure that the user was not created in the database with the provided email
-        $this->assertDatabaseMissing('users', ['email' => $userData['email']]);
+        $this->assertDatabaseMissing('users', ['email' => $schoolData['email']]);
     }
 
 
@@ -213,9 +254,7 @@ class SchoolFeatureTest extends TestCase
             'founding_year' => 2000,
             'student_capacity' => 500,
             'photo' => $file, // Pass the fake file as the photo
-        ];
 
-        $userData = [
             'name' => 'School User',
             'email' => 'schooluser@example.com',
             'password' => 'password',
@@ -226,7 +265,7 @@ class SchoolFeatureTest extends TestCase
         // The request should simulate creating a school with the provided data
         $response = $this->actingAs($admin)->postJson(
             '/api/schools',
-            array_merge($schoolData, $userData)
+            $schoolData
         );
 
         // Assert the request was successful
@@ -319,9 +358,7 @@ class SchoolFeatureTest extends TestCase
             'founding_year' => 2000,
             'student_capacity' => 500,
             'photo' => $file, // Pass the fake file as the photo
-        ];
 
-        $userData = [
             'name' => 'School User',
             'email' => 'schooluser@example.com',
             'password' => 'password',
@@ -332,7 +369,7 @@ class SchoolFeatureTest extends TestCase
         // The request should simulate creating a school with the provided data
         $response = $this->actingAs($admin)->postJson(
             '/api/schools',
-            array_merge($schoolData, $userData)
+            $schoolData
         );
         // Decode the response data
         $responseData = $response->json();

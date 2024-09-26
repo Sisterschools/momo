@@ -21,7 +21,7 @@ class UserRegisteredMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Welcome to Momo Education Platform!')
+        return $this->subject('Welcome to MoMo Education Platform!')
             ->view('emails.user_registered');
     }
 }

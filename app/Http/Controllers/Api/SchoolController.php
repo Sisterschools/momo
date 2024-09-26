@@ -11,6 +11,7 @@ use App\Http\Requests\School\UpdateSchoolRequest;
 use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Requests\School\SearchSchoolRequest;
 use App\Http\Resources\SchoolResource;
+use App\Http\Resources\SchoolCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -21,34 +22,53 @@ class SchoolController extends Controller
     public function index()
     {
         $this->authorize('viewAny', School::class);
-        $schools = School::paginate(10);
-        return SchoolResource::collection($schools);
+        $schools = School::paginate();
+        return SchoolCollection::make($schools);
     }
 
-    public function store(StoreSchoolRequest $schoolRequest, RegisterUserRequest $userRequest)
+    public function store(StoreSchoolRequest $request)
     {
         $this->authorize('create', School::class);
 
-        $schoolData = $schoolRequest->validated();
-        $userData = $userRequest->validated();
+
 
         DB::beginTransaction();
 
         try {
-            $school = School::create($schoolData);
+
+            // Create the user first
+            $userData = $request->only(['name', 'email', 'password', 'role']);
+            $userData['role'] = 'school';
             $user = User::create($userData);
+
+
+            // Create the school
+            $schoolData = $request->only([
+                'title',
+                'photo',
+                'address',
+                'description',
+                'phone_number',
+                'website',
+                'founding_year',
+                'student_capacity'
+            ]);
+            $school = School::create($schoolData);
+
+
             $school->user()->save($user);
+            event(new UserRegisteredEvent($user, $userData['password']));
 
             DB::commit();
-
-            event(new UserRegisteredEvent($user, $userData['password']));
 
             return SchoolResource::make($school);
 
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['message' => 'Error creating school and user',
-            'errors' => $e->getMessage()], 500);
+            return response()->json([
+                'message' => 'Error creating school and user',
+                'errors' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -64,7 +84,7 @@ class SchoolController extends Controller
         $school->update($request->validated());
         return response()->json([
             'message' => 'School updated successfully.',
-            'data' =>  SchoolResource::make($school)
+            'data' => SchoolResource::make($school)
         ]);
     }
 
@@ -77,9 +97,9 @@ class SchoolController extends Controller
 
     public function search(SearchSchoolRequest $request)
     {
-        $term = $request->input('search');
-        $schools = School::search($term)->get();
+        $term = $request->query('search');
+        $schools = School::search($term)->paginate()->appends(['search' => $term]); // Paginate search results with 10 items per page
 
-        return SchoolResource::collection($schools);
+        return SchoolCollection::make($schools);
     }
 }

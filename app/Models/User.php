@@ -11,6 +11,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
 
+    protected $perPage = 10;
     public const ROLES = [
         'admin' => 'Admin',
         'school' => 'School',
