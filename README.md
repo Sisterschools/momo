@@ -6,36 +6,38 @@ This document outlines the endpoints available in our DEEP REST API application 
 
 Before using the API, ensure you have completed the following steps:
 
-1. **Install Docker**: Make sure Docker is installed on your system.
+1. **Install Composer**:
+    ```
+    curl -sS https://getcomposer.org/installer | php
+    sudo mv composer.phar /usr/local/bin/composer
+    ```
+2. **Set Permissions (for Unix systems):**
+    ```
+    sudo chmod -R 775 storage bootstrap/cache
+    chown -R www-data:www-data storage
+    ```
 
-2. **Configure Environment Variables**:
+3. **Configure Environment Variables**:
    - Copy the example environment file:
-
      ```
      cp .env.example .env
      ```
    - Open the new `.env` file and update the MySQL, redis, mail server details according to your setup.
 
-3. **Build and start the containers**:
-   ```
-   docker compose up -d --build
-   ```
+3. **Generate app key:**:
+    ```
+    php artisan key:generate
+    ```
 
-4. **Install Composer dependencies**:
-   ```
-   docker compose exec web composer install
-   ```
-
-5. **Check logs for admin credentials**:
-   ```
-   docker compose logs web
-   ```
-   This command will display the logs for DEEP API. Look for the output containing the admin user's credentials. Make sure to save these for logging in as an admin.
+4. **Run Development Server:**
+    ```
+    php artisan serve
+    ```
 
 6. (Optional) Run tests:
-   ```
-   docker compose exec web php artisan test
-   ```
+    ```
+    php artisan test
+    ```
 
 ## Authentication
 
@@ -346,11 +348,7 @@ All routes in this section require authentication using Bearer tokens.
 - **Description:** Retrieve a list of programs associated with a specific project
 - **Authentication:** Required (Bearer Token)
 
-### List Completed Programs in Project
-- **URL:** `/api/projects/{id}/completed-programs`
-- **Method:** `GET`
-- **Description:** Retrieve a list of completed programs in a specific project
-- **Authentication:** Required (Bearer Token)
+---
 
 ## Programs
 All routes in this section require authentication using Bearer tokens.
@@ -393,11 +391,7 @@ All routes in this section require authentication using Bearer tokens.
 - **Description:** Retrieve a list of projects associated with a specific program
 - **Authentication:** Required (Bearer Token)
 
-### List Completed Projects for Program
-- **URL:** `/api/programs/{id}/completed-projects`
-- **Method:** `GET`
-- **Description:** Retrieve a list of projects where this program is completed
-- **Authentication:** Required (Bearer Token)
+---
 
 ## Project-Program Operations
 All routes in this section require authentication using Bearer tokens.
@@ -414,17 +408,18 @@ All routes in this section require authentication using Bearer tokens.
 - **Description:** Detach a program from a project
 - **Authentication:** Required (Bearer Token)
 
-### Mark Program as Complete in Project
-- **URL:** `/api/projects/{project_id}/programs/{program_id}/complete`
+### Update Program Status in Project
+- **URL:** `/api/projects/{project_id}/programs/{program_id}/status/{status}`
 - **Method:** `PATCH`
-- **Description:** Mark a program as complete within a project
+- **Description:** Update the status of a program within a project (`not_ready`, `ready`, or `archived`)
 - **Authentication:** Required (Bearer Token)
 
-### Mark Program as Incomplete in Project
-- **URL:** `/api/projects/{project_id}/programs/{program_id}/incomplete`
-- **Method:** `PATCH`
-- **Description:** Mark a program as incomplete within a project
+### List Programs by Status in Project
+- **URL:** `/api/projects/{id}/programs/status/{status}`
+- **Method:** `GET`
+- **Description:** Retrieve a list of programs by status (e.g., `not_ready`, `ready`, `archived`) within a project
 - **Authentication:** Required (Bearer Token)
+
 
 ### Attach Students to Program in Project
 - **URL:** `/api/projects/{project_id}/programs/{program_id}/students`
