@@ -1,0 +1,44 @@
+body{
+    font-family: 'Open Sans2';
+}
+input, button{
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 10px 1em;
+    margin-bottom: 0.5em;
+    border-radius: 4px;
+    border-color: #f8f8f8;
+    -webkit-appearance: none;
+}
+#app > div{
+    *{
+        color: var(--momo-black);
+        font-size:18px;
+    }
+    form{
+        width: 24em;
+        max-width: 24em;
+        margin: 2em auto;
+        padding: 8px;
+        padding-bottom: 1em;
+        background-color: #f8f8f8;
+        border-left: 4px solid var(--momo-blue);
+    } 
+    form div{
+        padding-bottom:0.5em;
+        text-align: right;
+    }
+    input{
+        width: 100%;
+    }
+    button{
+        cursor: pointer;
+        margin-top: 1.5em;
+        background-color: var(--momo-blue);
+        color: var(--momo-white);
+        border: 1px solid var(--momo-white);
+    }
+    button:hover{
+        zoom: 1.1;
+    }
+}
