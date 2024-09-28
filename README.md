@@ -29,15 +29,32 @@ Before using the API, ensure you have completed the following steps:
     php artisan key:generate
     ```
 
-4. **Run Development Server:**
+4. **Update database**
     ```
+    php artisan migrate
+    php artisan db:seed
+    ```
+
+5. **Install frontend modulee**
+    npm install
+
+6. **Run Development Servers:**
+    ```
+    npm run dev
     php artisan serve
     ```
 
-6. (Optional) Run tests:
+8. (Optional) Run tests:
     ```
     php artisan test
     ```
+
+Please check your code before making a pull request with:
+
+  ```
+  gh act -P ubuntu-latest=shivammathur/node:bookworm [-p=false]
+  ```
+
 
 ## Authentication
 
