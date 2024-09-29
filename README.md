@@ -39,6 +39,8 @@ Before using the API, ensure you have completed the following steps:
     npm install
 
 6. **Run Development Servers:**
+    Change the development server details in vite.config.js
+
     ```
     npm run dev
     php artisan serve
@@ -55,6 +57,11 @@ Please check your code before making a pull request with:
   gh act -P ubuntu-latest=shivammathur/node:bookworm [-p=false]
   ```
 
+For nicely formatted js code check:
+
+  ```
+  npx eslint
+  ```
 
 ## Authentication
 
