@@ -34,9 +34,12 @@ Before using the API, ensure you have completed the following steps:
     php artisan migrate
     php artisan db:seed
     ```
+    Your password to test with is dumped to your terminal in the second step
 
-5. **Install frontend modulee**
+5. **Install frontend modules**
+    ```
     npm install
+    ```
 
 6. **Run Development Servers:**
     Change the development server details in vite.config.js
