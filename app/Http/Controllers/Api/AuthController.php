@@ -15,6 +15,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Http\Requests\User\PasswordSetupRequest;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -25,16 +29,39 @@ class AuthController extends Controller
         $this->authorize('register', Auth::user());
 
         $data = $request->validated();
-        $user = User::create($data);
-        event(new UserRegisteredEvent($user, $data['password']));
+        $data['password'] = Hash::make(str()->random(10));// Temporary password
 
+        $user = User::create($data);
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        // This should create the token in your `password_reset_tokens` table
+        $passwored_token = Password::createToken($user);
+        // Trigger event to send a url to the user to setup their password
+        event(new UserRegisteredEvent($user, $passwored_token));
+
 
         return response()->json([
             'data' => UserResource::make($user),
             'access_token' => $token,
             'token_type' => 'Bearer',
         ], 201);
+    }
+
+    // Password Setup for first time through email
+    public function passwordSetup(PasswordSetupRequest $request)
+    {
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => $password
+                ])->save();
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? response()->json(['message' => 'Password has been setup successfully.'], 200)
+            : response()->json(['message' => 'Invalid token.'], 400);
     }
 
     public function updatePassword(UpdatePasswordRequest $request)
