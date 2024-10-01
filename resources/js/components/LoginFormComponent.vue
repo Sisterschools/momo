@@ -35,7 +35,7 @@ export default{
       .then( ( response ) => response.json())
       .then( ( json ) => {
         this.invalid = false
-        this.$emit('loggedin', json.data)
+        this.$emit('loggedin', json)
       })
     }
   }
@@ -72,6 +72,9 @@ export default{
         required
       >
     </label>
+    <p class="small-font italic">
+      <a href="#/reset-password">Forgot your password?</a>
+    </p>
   </Form>
 </template>
 

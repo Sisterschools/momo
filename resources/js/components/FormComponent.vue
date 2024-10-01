@@ -17,10 +17,10 @@ export default{
 </script>
 
 <template>
-  <form action="javascript:void(0)">
+  <form @submit.prevent="submit">
     <div>{{ caption }}</div>
     <slot />
-    <button @click="submit">
+    <button>
       {{ okText }}
     </button>
   </form>

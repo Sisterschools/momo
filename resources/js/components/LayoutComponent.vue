@@ -1,18 +1,20 @@
 <script setup>
   import LoginForm from './LoginFormComponent.vue'
   import LogedinlayoutComponent from './LoggedinLayoutComponent.vue'
+
 </script>
 
 <script>
 export default{
+  emits: ["isloggedin"],
   data(){
     return{
-      loggedin: false
+      data: null
     }
   },
   methods:{
-    showLoggedin(){
-      this.loggedin = true
+    showLoggedin( data ){
+      this.data = data
     }
   }
 }
@@ -21,7 +23,8 @@ export default{
 <template>
   <div>
     <LogedinlayoutComponent 
-      v-if="loggedin" 
+      v-if="data" 
+      :user-data="data"
     />
     <LoginForm 
       v-else
