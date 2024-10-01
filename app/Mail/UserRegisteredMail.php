@@ -11,17 +11,20 @@ class UserRegisteredMail extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
-    public $password;
+    public $token;
 
-    public function __construct($user, $password)
+    public function __construct($user, $token)
     {
         $this->user = $user;
-        $this->password = $password;
+        $this->token = $token;
     }
 
     public function build()
     {
+        $url = config('app.url') . '/register?token=' . $this->token;
+
         return $this->subject('Welcome to MoMo Education Platform!')
-            ->view('emails.user_registered');
+            ->view('emails.user_registered')
+            ->with(['url' => $url]);
     }
 }

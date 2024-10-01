@@ -10,12 +10,12 @@ class UserRegisteredEvent
     use Dispatchable, SerializesModels;
 
     public $user;
-    public $password; // Add the password
+    public $token; // Add the token
 
 
-    public function __construct(User $user, string $password)
+    public function __construct(User $user, string $token)
     {
         $this->user = $user;
-        $this->password = $password;
+        $this->token = $token;
     }
 }

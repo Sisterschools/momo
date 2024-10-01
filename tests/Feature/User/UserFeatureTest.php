@@ -242,15 +242,13 @@ class UserFeatureTest extends TestCase
         $response = $this->postJson('/api/register', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
+
             'role' => 'student',
         ]);
 
         // Assert that the UserRegistered event was dispatched
         Event::assertDispatched(UserRegisteredEvent::class, function ($event) {
-            return $event->user->email === 'john@example.com'
-                && $event->password === 'password123';
+            return $event->user->email === 'john@example.com';
         });
     }
 

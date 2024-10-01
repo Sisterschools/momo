@@ -14,7 +14,7 @@ class UserRegisteredListener implements ShouldQueue
     public function handle(UserRegisteredEvent $event)
     {
         // Your email sending logic here
-        Mail::to($event->user->email)->send(new UserRegisteredMail($event->user, $event->password));
+        Mail::to($event->user->email)->send(new UserRegisteredMail($event->user, $event->token));
 
     }
 
