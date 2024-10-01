@@ -31,6 +31,5 @@ export default defineConfig({
           }
         }
     },
-    publicDir: 'public/',
     server:{ host: 'blueberry.local', port:3000},
 });
