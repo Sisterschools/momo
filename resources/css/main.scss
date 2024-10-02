@@ -1,6 +1,9 @@
-body{
+@import 'variables';
+
+html, body{
     font-family: 'Open Sans2';
     font-size:15px;
+    line-height: 1.5em;
 }
 input, button{
     display: inline-block;

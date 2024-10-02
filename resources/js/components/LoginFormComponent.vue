@@ -1,6 +1,6 @@
 <script setup>
   import Form from './FormComponent.vue'
-  import postServer from '../postserver.js'
+  import serverAPI from '../server.js'
 
   defineProps({
     caption: {type:String, default:'Login form'},
@@ -22,20 +22,18 @@ export default{
   },
   methods: {
     login() {
-      postServer('/api/login', {
+      this.invalid = false
+      serverAPI('/api/login', {
         email: this.email, 
         password: this.password
-      } )
-      .then( ( response ) => {
-        if(response.ok)
-          return response
-        else
-          this.invalid = true
-      })
-      .then( ( response ) => response.json())
+      }, 
+      'POST' )
+      .catch( () => this.invalid = true )
       .then( ( json ) => {
-        this.invalid = false
-        this.$emit('loggedin', json)
+        if(this.invalid == false){
+          this.invalid = false
+          this.$emit('loggedin', json)
+        }
       })
     }
   }

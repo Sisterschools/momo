@@ -1,21 +1,29 @@
-var postServer = ( uri, vars, token ) => {
+var serverAPI = ( uri, vars, method = 'POST', token ) => {
 
   var headers = {
     "Content-Type": "application/x-www-form-urlencoded",
   }
 
   if( token ){
-    headers["Autorization"] = "Bearer " + token
+    headers["Authorization"] = "Bearer " + token
   }
 
   var body = new URLSearchParams(vars)
   
   return fetch( uri, { 
-    method: 'POST',
+    method,
     headers,
-    body
+    ...(method == 'POST' && {body}) 
   } )
   .catch( console.log )
+  .then( ( response ) => {
+    if(response.ok && response.status < 300)
+      return response
+    else{
+      throw("Error")
+    }
+  })
+  .then( ( response ) => response.json())
 }
 
-export default postServer
+export default serverAPI
