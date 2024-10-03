@@ -1,7 +1,7 @@
 @import 'variables';
 
 html, body{
-    font-family: 'Open Sans2';
+    font-family: 'Open Sans2', Arial, sans-serif;
     font-size:15px;
     line-height: 1.5em;
 }
@@ -22,6 +22,12 @@ input:focus{
     *{
         color: var(--momo-black);
     }
+    @keyframes shake {
+        10% {transform: translateX(10px);}
+        33% {transform: translateX(-10px);}
+        66% {transform: translateX(10px);}
+        100% {transform: translateX(-10px);}
+      }
     form{
         width: 20em;
         max-width: 100%;
@@ -34,6 +40,12 @@ input:focus{
     form div{
         padding-bottom:0.5em;
         text-align: right;
+    }
+    form.invalid{
+        animation-name: shake; 
+        animation-duration: 0.5s;
+        animation-iteration-count: 2;
+        animation-timing-function: linear;
     }
     input{
         width: 100%;

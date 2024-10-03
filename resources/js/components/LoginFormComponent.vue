@@ -45,6 +45,7 @@ export default{
   <Form 
     :caption="caption" 
     :ok-text="okText"
+    :class="invalid? 'invalid' : null"
     @form-submitted="login"
   >
     <p 
@@ -61,6 +62,8 @@ export default{
         type="email" 
         required
         autocomplete="username"
+        oninvalid="this.setCustomValidity('You forgot to enter your email address!')"
+        oninput="this.setCustomValidity('')"
       >
     </label>
     <label>
@@ -70,10 +73,14 @@ export default{
         type="password" 
         required
         autocomplete="current-password"
+        oninvalid="this.setCustomValidity('You forgot to enter your password!')"
+        oninput="this.setCustomValidity('')"
       >
     </label>
     <p class="small-font italic">
-      <a href="#/reset-password">Forgot your password?</a>
+      <RouterLink to="/reset-password">
+        Forgot your password?
+      </RouterLink>
     </p>
   </Form>
 </template>
