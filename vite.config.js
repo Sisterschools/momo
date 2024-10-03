@@ -1,7 +1,11 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import eslint from 'vite-plugin-eslint';
-import vue from '@vitejs/plugin-vue'; 
+import vue from '@vitejs/plugin-vue';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig({
     plugins: [
@@ -10,7 +14,7 @@ export default defineConfig({
             'resources/js/app.js',
         ]),
         eslint(),
-        vue({ 
+        vue({
             template: {
                 transformAssetUrls: {
                     base: null,
@@ -19,18 +23,18 @@ export default defineConfig({
             },
         }),
     ],
-    resolve: { 
+    resolve: {
         alias: {
             vue: 'vue/dist/vue.esm-bundler.js',
-            '@assets': '../resources/'
+            '@assets': __dirname + '/resources'
         },
     },
     css: {
         preprocessorOptions: {
-          scss: {
-            api: 'modern-compiler'
-          }
+            scss: {
+                api: 'modern-compiler'
+            }
         }
     },
-    server:{ host: 'blueberry.local', port:3000},
+    server: { host: 'blueberry.local', port: 3000 },
 });
