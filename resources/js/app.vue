@@ -1,17 +1,38 @@
+<script setup>
+import "external-svg-loader";
+import { store } from './store.js'
+import school from '../svg/school.svg';
+</script>
+
 <template>
-  <nav>
-    <RouterLink to="/">
-      Home
-    </RouterLink>&nbsp;
-    <RouterLink to="/reset-password">
-      Some other route
-    </RouterLink>
-  </nav>
-  <main>
-    <RouterView v-slot="{ Component }">
-      <KeepAlive>
-        <component :is="Component" />
-      </KeepAlive>
-    </RouterView>
-  </main>
+  <div>
+    <nav v-if="store.token">
+      <RouterLink to="/">
+        <svg 
+          :data-src="school" 
+          class="icon" 
+        />
+      </RouterLink>&nbsp;
+      <RouterLink to="/reset-password">
+        <svg 
+          :data-src="school" 
+          class="icon"
+        />
+      </RouterLink>
+      <div 
+        v-if="store.isListComponent"
+      >
+        [+]
+      </div>
+    </nav>
+    <main>
+      <RouterView 
+        v-slot="{ Component }" 
+      >
+        <component 
+          :is="Component"
+        />
+      </RouterView>
+    </main>
+  </div>
 </template>

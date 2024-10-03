@@ -1,4 +1,5 @@
 <script setup>
+  import { store } from '../store.js'
   import LoginForm from './LoginFormComponent.vue'
   import LogedinlayoutComponent from './LoggedinLayoutComponent.vue'
 
@@ -6,25 +7,19 @@
 
 <script>
 export default{
-  emits: ["isloggedin"],
   data(){
     return{
       data: null
     }
   },
-  methods:{
-    showLoggedin( data ){
-      this.data = data
-    }
-  }
 }
 </script>
 
 <template>
   <div>
     <LogedinlayoutComponent 
-      v-if="data" 
-      :user-data="data"
+      v-if="store.token" 
+      :user-data="store.userData"
     />
     <LoginForm 
       v-else
@@ -32,7 +27,6 @@ export default{
       ok-text="Login"
       label-name="Your emailaddress :"
       label-password="and password :"
-      @loggedin="showLoggedin"
     />
   </div>
 </template>

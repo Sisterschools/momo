@@ -1,5 +1,5 @@
 <script setup>
-  import SchoolsListComponent from './SchoolsListComponent.vue'
+  import ListSchoolsComponent from './ListSchoolsComponent.vue'
   
   defineProps({
     userData: { type:{}, required: true, default: null}
@@ -10,7 +10,7 @@
   export default{
     computed: {
       whichComponent(){
-        return SchoolsListComponent;
+        return ListSchoolsComponent;
       }
     },
   }

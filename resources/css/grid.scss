@@ -1,29 +1,16 @@
-@import 'variables';
-
 #app main div{
   .table{
     width: 100%;
   }
   .row{
     display: flex;
+    cursor: pointer;
   }
   .row:nth-child(1) .cell{
     text-align: center;
     text-transform: capitalize;
     background-color: var(--momo-blue);
     filter:grayscale(25%);
-  }
-  .row:nth-child(1) > div:nth-last-child(1){
-    cursor: pointer;
-    position: absolute;
-    height: $line-height;
-    right: $main-margin;
-    font-size: 120%;
-    background-color: var(--momo-orange);
-    color: var(--momo-white);
-    padding: 0 1.5em;
-    border: 3px solid var(--momo-orange);
-    border-radius: 3px;
   }
   .row:nth-child(1) > div.cell{
     color: var(--momo-white);

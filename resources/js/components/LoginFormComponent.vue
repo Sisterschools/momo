@@ -1,4 +1,5 @@
 <script setup>
+  import { store } from '../store.js'
   import Form from './FormComponent.vue'
   import serverAPI from '../server.js'
 
@@ -12,7 +13,6 @@
 
 <script>
 export default{
-  emits: ['loggedin'],
   data(){
     return{
       invalid: false,
@@ -32,7 +32,8 @@ export default{
       .then( ( json ) => {
         if(this.invalid == false){
           this.invalid = false
-          this.$emit('loggedin', json)
+          store.token = json.access_token
+          store.userData = json
         }
       })
     }
@@ -59,7 +60,7 @@ export default{
         v-focus 
         type="email" 
         required
-        autocomplete="false"
+        autocomplete="username"
       >
     </label>
     <label>
@@ -68,6 +69,7 @@ export default{
         v-model="password"
         type="password" 
         required
+        autocomplete="current-password"
       >
     </label>
     <p class="small-font italic">

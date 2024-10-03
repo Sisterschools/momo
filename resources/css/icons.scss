@@ -1,0 +1,28 @@
+@import 'variables';
+
+.icon{
+  width: 30px;
+  height: 30px;
+  vertical-align: bottom;
+  background-color:var(--momo-black);
+  border-radius: 8px;
+}
+.icon *{
+  stroke: var(--momo-white);
+  stroke-width: 5px;
+  fill: var(--momo-black);
+}
+nav{
+  background-color: var(--momo-grey);
+  padding:4px;
+}
+nav > div:nth-last-child(1){
+  cursor: pointer;
+  float:right;
+  font-size: 120%;
+  background-color: var(--momo-green);
+  color: var(--momo-white);
+  padding: 0 1.5em;
+  border: 3px solid var(--momo-green);
+  border-radius: 3px;
+}

@@ -1,12 +1,12 @@
 @font-face {
     font-family: 'Open Sans2';
-    src: url('/resources/fonts/OpenSans-VariableFont_wdth,wght.ttf');
+    src: url('@assets/fonts/OpenSans-VariableFont_wdth,wght.ttf');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: 'Open Sans2';
-    src: url('/resources/fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf');
+    src: url('@assets/fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf');
     font-weight: normal;
     font-style: italic;
 }
