@@ -3,6 +3,7 @@
 
   defineProps({
     id: {type: String, required: false, default: 'id'},
+    showIDColumn: { type: Boolean, required: false, default: false},
     items: {type: Array, required: true, default: new Array},
     onRowClick: {type: Function, required: false, default: () => {}}
   })
@@ -22,7 +23,7 @@ export default{
         o.target.closest('.row')
         .querySelector('div:not([data-src=""])')
         .getAttribute('data-src')
-        
+
       if(id)
         this.onRowClick( id )
     }
@@ -39,9 +40,9 @@ export default{
       <div
         v-for="(key) in Object.entries(items[0])" 
         :key="key"
-        class="cell"
+        :class="showIDColumn || id != key[0] ? 'cell': null"
       >
-        {{ key[0] }}
+        {{ showIDColumn || id != key[0] ? key[0] : '' }}
       </div>
     </div>
     <div  
@@ -54,9 +55,9 @@ export default{
         v-for="(prop, index) in item"
         :key="prop"
         :data-src="index == id ? prop : null"
-        class="cell"
+        :class="showIDColumn || index != id ? 'cell' : null"
       >
-        {{ prop }}
+        {{ showIDColumn || index != id ? prop : '' }}
       </div>
     </div>
   </div>
