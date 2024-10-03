@@ -19,7 +19,7 @@ export default{
     serverAPI( '/api/schools', null, 'GET', store.token )
     .catch( console.log )
     .then( ( json ) => {
-      this.items = [json] //[{id:1, test:1, test2:2},{id:2, test:3, test2:4}]
+      this.items = [json]
     } )
   },
   methods:{

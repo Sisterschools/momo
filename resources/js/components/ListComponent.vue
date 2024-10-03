@@ -3,7 +3,7 @@
 
   defineProps({
     id: {type: String, required: false, default: 'id'},
-    showIDColumn: { type: Boolean, required: false, default: false},
+    showIDColumn: { type: Boolean, required: false, default: false}, 
     items: {type: Array, required: true, default: new Array},
     onRowClick: {type: Function, required: false, default: () => {}}
   })
@@ -11,6 +11,24 @@
 
 <script>
 export default{
+  computed:{
+    filtered: function(){
+      var objs = this.items.map( ( obj ) => {
+        var o = Object.assign({}, obj)
+        if(! this.showIDColumn)
+          delete o[this.id]
+        return o
+      })
+      return objs
+    },
+    filtered0: function(){
+      var objs = Object.entries(this.items[0]),
+        n = objs.find( ( o ) => o[0] == this.id)
+      if( ! this.showIDColumn && n )
+        objs.splice( objs[n], 1)
+      return objs
+    }
+  },
   mounted(){
     store.isListComponent = true
   },
@@ -38,7 +56,7 @@ export default{
       class="row" 
     >
       <div
-        v-for="(key) in Object.entries(items[0])" 
+        v-for="(key) in filtered0" 
         :key="key"
         :class="showIDColumn || id != key[0] ? 'cell': null"
       >
@@ -46,7 +64,7 @@ export default{
       </div>
     </div>
     <div  
-      v-for="item in items" 
+      v-for="(item, n) in filtered" 
       :key="item"
       class="row"
       @click.stop="_onRowClick" 
@@ -54,7 +72,7 @@ export default{
       <div 
         v-for="(prop, index) in item"
         :key="prop"
-        :data-src="index == id ? prop : null"
+        :data-src="items[n][id]"
         :class="showIDColumn || index != id ? 'cell' : null"
       >
         {{ showIDColumn || index != id ? prop : '' }}

@@ -3,8 +3,24 @@
     width: 100%;
   }
   .row{
-    display: flex;
+    display: block;
     cursor: pointer;
+    max-width: 100%;
+    border-bottom: 2px solid var(--momo-blue);
+  }
+  .cell{
+    display: block;
+    box-sizing: border-box;
+    float: left;
+    min-height:calc(2em + 2px);
+    flex: 1;
+    padding: 0.25em;
+    border: 1px solid var(--momo-blue);
+    word-wrap: break-word;
+  }
+  .cell:not(.expand){
+    max-height: calc(2em + 2px);
+    overflow-y: auto;
   }
   .row:nth-child(1) .cell{
     text-align: center;
@@ -15,9 +31,122 @@
   .row:nth-child(1) > div.cell{
     color: var(--momo-white);
   }
-  .cell{
-    flex: 1;
-    padding: 0.25em;
-    border: 1px solid var(--momo-blue);
+  div.cell:nth-child(1):nth-last-child(10),
+  div.cell:nth-child(1):nth-last-child(10) ~ div.cell{
+    min-width: 10%;
+    max-width: 10%;
+  }
+  div.cell:nth-child(1):nth-last-child(9),
+  div.cell:nth-child(1):nth-last-child(9) ~ div.cell{
+    min-width: 11.11111%;
+    max-width: 11.11111%;
+  }
+  div.cell:nth-child(1):nth-last-child(8),
+  div.cell:nth-child(1):nth-last-child(8) ~ div.cell{
+    min-width: 12.5%;
+    max-width: 12.5%;
+  }
+  div.cell:nth-child(1):nth-last-child(7),
+  div.cell:nth-child(1):nth-last-child(7) ~ div.cell{
+    min-width: 14.2857%;
+    max-width: 14.2857%;
+  }
+  div.cell:nth-child(1):nth-last-child(6),
+  div.cell:nth-child(1):nth-last-child(6) ~ div.cell{
+    min-width: 16.66667%;
+    max-width: 16.66667%;
+  }
+  div.cell:nth-child(1):nth-last-child(5),
+  div.cell:nth-child(1):nth-last-child(5) ~ div.cell{
+    min-width: 20%;
+    max-width: 20%;
+  }
+  div.cell:nth-child(1):nth-last-child(4),
+  div.cell:nth-child(1):nth-last-child(4) ~ div.cell{
+    min-width: 25%;
+    max-width: 25%;
+  }
+  div.cell:nth-child(1):nth-last-child(3),
+  div.cell:nth-child(1):nth-last-child(3) ~ div.cell{
+    min-width: 33.333333%;
+    max-width: 33.333333%;
+  }
+  div.cell:nth-child(1):nth-last-child(2),
+  div.cell:nth-child(1):nth-last-child(2) ~ div.cell{
+    min-width: 50%;
+    max-width: 50%;
+  }
+  div.cell:nth-child(1):nth-last-child(1),
+  div.cell:nth-child(1):nth-last-child(1) ~ div.cell{
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  @media screen and (max-width: 600px){
+    .row > div.cell:nth-child(1):nth-last-child(3){
+      min-height: calc(4em + 3px);
+    }
+    .row > div.cell:nth-child(1):nth-last-child(5){
+      min-height: calc(2em + 3px);
+    }
+    .row > div.cell:nth-child(1):nth-last-child(7){
+      min-height: calc(6em + 4px);
+    }
+    .row > div.cell:nth-child(1):nth-last-child(9){
+      min-height: calc(7em + 3px);
+    }
+    .row > div.cell:nth-child(1):nth-last-child(10){
+      min-height: calc(4.5em - 2px);
+    }
+    div.cell:nth-child(1):nth-last-child(10),
+    div.cell:nth-child(1):nth-last-child(10) ~ div.cell{
+      min-width: 3 * 10%;
+      max-width: 3 * 10%;
+    }
+    div.cell:nth-child(1):nth-last-child(9),
+    div.cell:nth-child(1):nth-last-child(9) ~ div.cell{
+      min-width: 50%;
+      max-width: 50%;
+    }
+    div.cell:nth-child(1):nth-last-child(8),
+    div.cell:nth-child(1):nth-last-child(8) ~ div.cell{
+      min-width: 33.3333%;
+      max-width: 3.33333%;
+    }
+    div.cell:nth-child(1):nth-last-child(7),
+    div.cell:nth-child(1):nth-last-child(7) ~ div.cell{
+      min-width: 3 * 14.2857%;
+      max-width: 3 * 14.2857%;
+    }
+    div.cell:nth-child(1):nth-last-child(6),
+    div.cell:nth-child(1):nth-last-child(6) ~ div.cell{
+      min-width: 3 * 16.66667%;
+      max-width: 3 * 16.66667%;
+    }
+    div.cell:nth-child(1):nth-last-child(5),
+    div.cell:nth-child(1):nth-last-child(5) ~ div.cell{
+      min-width: 2 * 25%;
+      max-width: 2 * 25%;
+    }
+    div.cell:nth-child(1):nth-last-child(4),
+    div.cell:nth-child(1):nth-last-child(4) ~ div.cell{
+      min-width: 2 * 25%;
+      max-width: 2 * 25%;
+    }
+    div.cell:nth-child(1):nth-last-child(3),
+    div.cell:nth-child(1):nth-last-child(3) ~ div.cell{
+      min-width: 50%;
+      max-width: 50%;
+    }
+    div.cell:nth-child(1):nth-last-child(2),
+    div.cell:nth-child(1):nth-last-child(2) ~ div.cell{
+      min-width: 50%;
+      max-width: 50%;
+    }
+    div.cell:nth-child(1):nth-last-child(1),
+    div.cell:nth-child(1):nth-last-child(1) ~ div.cell{
+      min-width: 100%;
+      max-width: 100%;
+    }
   }
 }
