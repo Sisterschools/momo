@@ -17,7 +17,7 @@
 </script>
 
 <template>
-  <div>    
+  <div>
     <component 
       :is="whichComponent" 
       :user-data="userData" 

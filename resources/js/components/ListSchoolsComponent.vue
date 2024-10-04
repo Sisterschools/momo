@@ -16,10 +16,11 @@ export default{
     }
   },  
   mounted(){
+    store.addNew = '/schools/add'
     serverAPI( '/api/schools', null, 'GET', store.token )
     .catch( console.log )
     .then( ( json ) => {
-      this.items = [json]
+      this.items = json.data
     } )
   },
   methods:{
@@ -34,5 +35,6 @@ export default{
   <ListComponent 
     :items="items" 
     :on-row-click="selectSchool"
+    caption="Schools"
   />
 </template>

@@ -9,11 +9,12 @@ import { createWebHashHistory, createRouter } from 'vue-router'
 import ResetPassword from './components/ResetPasswordComponent.vue'
 
 const routes = [
-  { path: '/', component: Layout },
-  { path: '/reset-password', component: ResetPassword },
-  { path: '/list-schools', component: ListSchools },
-  { path: '/view-school/:id', name:'viewschool', component: ViewSchool }
-]
+    { path: '/', component: Layout },
+    { path: '/reset-password', component: ResetPassword },
+    { path: '/list-schools', component: ListSchools },
+    { path: '/view-school/:id', name:'viewschool', component: ViewSchool },
+    { path: '/schools/add', component: ViewSchool },
+  ]  
 
 const router = createRouter({
   history: createWebHashHistory(),

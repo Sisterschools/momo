@@ -5,7 +5,8 @@
     id: {type: String, required: false, default: 'id'},
     showIDColumn: { type: Boolean, required: false, default: false}, 
     items: {type: Array, required: true, default: new Array},
-    onRowClick: {type: Function, required: false, default: () => {}}
+    onRowClick: {type: Function, required: false, default: () => {}},
+    caption: {type: String, required: true, default: 'List'}
   })
 </script>
 
@@ -50,6 +51,7 @@ export default{
 </script>
 
 <template>
+  <p>{{ caption }}</p>
   <div class="table">
     <div 
       v-if="items && items[0]"
@@ -80,3 +82,9 @@ export default{
     </div>
   </div>
 </template>
+
+<style scoped>
+p{
+  text-align: center;
+}
+</style>

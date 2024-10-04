@@ -1,7 +1,8 @@
-var serverAPI = ( uri, vars, method = 'POST', token ) => {
+var serverAPI = ( uri, vars, method = 'POST', token, contentType = 'application/x-www-form-urlencoded') => {
 
   var headers = {
-    "Content-Type": "application/x-www-form-urlencoded",
+    "Content-Type": contentType,
+    "Accept": "application/json"
   }
 
   if( token ){
@@ -9,11 +10,15 @@ var serverAPI = ( uri, vars, method = 'POST', token ) => {
   }
 
   var body = new URLSearchParams(vars)
-  
+
+  if( method == 'PUT'){
+    body = JSON.stringify( vars )
+  }
+
   return fetch( uri, { 
     method,
     headers,
-    ...(method == 'POST' && {body}) 
+    ...((method == 'POST' || method == 'PUT') && {body}) 
   } )
   .catch( console.log )
   .then( ( response ) => {

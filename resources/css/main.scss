@@ -12,13 +12,12 @@ input, button{
     margin-bottom: 0.5em;
     border-radius: 4px;
     border-color: #f8f8f8;
-    -webkit-appearance: none;
 }
 input:focus{
     outline-color: 1px solid var(--momo-black);
     outline-style:groove;
 }
-#app main div{
+#app{
     *{
         color: var(--momo-black);
     }
@@ -60,10 +59,66 @@ input:focus{
     button:hover{
         zoom: 1.1;
     }
+    ul{
+        list-style-type:none
+    }
     .small-font{
         font-size: 80%;
     }
     .italic{
         font-style: italic;
+    }
+    .hide{
+        display: none;
+    }
+    nav,
+    main,
+    .header{
+        float: left;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    nav{
+        padding: 0.5em 0.5em;
+    }
+    ul{
+        padding: 0;
+        margin: 0;
+    }
+    .header div.user-details > ul{
+        width: 10em;
+        box-sizing: border-box;
+    }
+    .header ul.user-details,
+    .header ul.user-details .dropdown{
+        width: 10em;
+        float:right;
+        box-sizing: border-box
+    }
+    .header ul.user-details li{
+        cursor: pointer;
+    }
+    .header ul li.name{
+        padding-left: 0.5em;
+        font-size: 80%;
+    }
+    .header ul.user-details ul li{
+        padding-left: 0.5em;
+        padding-top: 0.5em;
+    }
+    .clr-border-left-admin,
+    .clr-border-left-admin ul ul{
+        border-left: 1px solid var(--momo-red);
+        border-bottom: 1px solid var(--momo-red);
+    }
+    .clr-border-left-teacher,
+    .clr-border-left-teacher ul ul{
+        border-left: 1px solid var(--momo-blue);
+        border-bottom: 1px solid var(--momo-blue);
+    }
+    .clr-border-left-student,
+    .clr-border-left-student ul ul{
+        border-left: 1px solid var(--momo-green);
+        border-bottom: 1px solid var(--momo-green);
     }
 }

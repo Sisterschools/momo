@@ -27,7 +27,8 @@ export default{
         email: this.email, 
         password: this.password
       }, 
-      'POST' )
+      'POST', 
+      )
       .catch( () => this.invalid = true )
       .then( ( json ) => {
         if(this.invalid == false){
