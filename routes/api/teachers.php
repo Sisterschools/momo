@@ -7,5 +7,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('teachers/search', [TeacherController::class, 'search'])
         ->name(name: 'teachers.search');
     ;
-    Route::resource('teachers', TeacherController::class);
+    Route::apiResource('teachers', TeacherController::class);
 });

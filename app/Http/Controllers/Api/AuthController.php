@@ -76,6 +76,9 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * @unauthenticated
+     */
     public function login(LoginUserRequest $request)
     {
         $user = User::where('email', $request->email)->first();

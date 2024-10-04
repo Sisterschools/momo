@@ -11,6 +11,9 @@ use App\Observers\SchoolObserver;
 use App\Observers\TeacherObserver;
 use App\Observers\StudentObserver;
 
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\OpenApi;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +35,12 @@ class AppServiceProvider extends ServiceProvider
         Teacher::observe(TeacherObserver::class);
         Student::observe(StudentObserver::class);
 
+
+        Scramble::afterOpenApiGenerated(function (OpenApi $openApi) {
+            $openApi->secure(
+                SecurityScheme::http('bearer')
+            );
+        });
 
 
     }
