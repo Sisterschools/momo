@@ -26,6 +26,7 @@ class StoreSchoolRequest extends FormRequest
             'student_capacity' => 'nullable|integer|min:1',
 
             // Validation for the User model
+            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
 
