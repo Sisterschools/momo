@@ -90,4 +90,10 @@ export default{
 #app p.error{
   color: var(--momo-red);
 }
+#app form{
+    margin: 20vh auto;
+}
+#app p{
+    margin: 0;
+}
 </style>

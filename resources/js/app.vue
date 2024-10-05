@@ -2,6 +2,7 @@
 import "external-svg-loader";
 import { store } from './store.js'
 import school from '../svg/school.svg';
+import student from '../svg/student.svg'
 
 import UserMenu from './components/UserMenuComponent.vue';
 
@@ -12,6 +13,7 @@ export default{
   methods:{
     logout(){
       store.token = null
+      store.router.push("/")
     },
     addNew(){
       store.router.push( store.addNew )
@@ -27,14 +29,12 @@ export default{
       :user="store.userData ? store.userData.data : {}" 
       class="user-details"
     >
-      <ul>
-        <li @click="logout">
-          - Logout
-        </li>
-        <li>
-          - Settings
-        </li>
-      </ul>
+      <li @click="logout">
+        - Logout
+      </li>
+      <li>
+        - Settings
+      </li>
     </user-menu>
   </div>
   <div>
@@ -45,9 +45,9 @@ export default{
           class="icon" 
         />
       </RouterLink>&nbsp;
-      <RouterLink to="/reset-password">
+      <RouterLink to="/list-users">
         <svg 
-          :data-src="school" 
+          :data-src="student" 
           class="icon"
         />
       </RouterLink>

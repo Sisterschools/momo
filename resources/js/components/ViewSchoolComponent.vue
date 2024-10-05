@@ -72,11 +72,12 @@ export default{
 <template>
   <div>
     <Form 
+      cancel="Cancel"
       :caption="$route.params.id? 'Update school' : 'New school'"
       @form-submitted="addOrUpdateSchool"
     >
       <label>
-        Title : 
+        Name of the school : 
         <input 
           v-model="title"
           required
@@ -84,8 +85,8 @@ export default{
           autocomplete="false"
         >
       </label>
-      <label>
-        Name : 
+      <label v-if="! $route.params.id">
+        Name of contact person : 
         <input 
           v-model="name"
           required
@@ -93,7 +94,7 @@ export default{
         >
       </label>
       <label>
-        Email : 
+        Email to log in : 
         <input 
           v-model="email"
           required
@@ -123,11 +124,11 @@ export default{
       </label>
       <label>
         Address : 
-        <input 
+        <textarea 
           v-model="address"
           required
           autocomplete="false"
-        >
+        />
       </label>
       <label>
         Description : 

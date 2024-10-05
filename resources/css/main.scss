@@ -13,6 +13,9 @@ input, button{
     border-radius: 4px;
     border-color: #f8f8f8;
 }
+#app button.submit{
+    background-color: var(--momo-red);
+}
 input:focus{
     outline-color: 1px solid var(--momo-black);
     outline-style:groove;
@@ -85,6 +88,14 @@ input:focus{
         padding: 0;
         margin: 0;
     }
+    textarea{
+        min-height: 4em;
+        line-height: $line-height;
+        width: 100%;
+        max-width: 100%;
+        padding: 0.5em 1em;
+        box-sizing: border-box;
+    }
     .header div.user-details > ul{
         width: 10em;
         box-sizing: border-box;
@@ -107,18 +118,15 @@ input:focus{
         padding-top: 0.5em;
     }
     .clr-border-left-admin,
-    .clr-border-left-admin ul ul{
-        border-left: 1px solid var(--momo-red);
-        border-bottom: 1px solid var(--momo-red);
+    .clr-border-left-admin ul{
+        box-shadow:2px 0 0 0 var(--momo-red) inset;
     }
     .clr-border-left-teacher,
-    .clr-border-left-teacher ul ul{
-        border-left: 1px solid var(--momo-blue);
-        border-bottom: 1px solid var(--momo-blue);
+    .clr-border-left-teacher ul{
+        box-shadow:2px 0 0 0 var(--momo-blue) inset;
     }
     .clr-border-left-student,
-    .clr-border-left-student ul ul{
-        border-left: 1px solid var(--momo-green);
-        border-bottom: 1px solid var(--momo-green);
+    .clr-border-left-student ul{
+        box-shadow:2px 0 0 0 var(--momo-green) inset;
     }
 }

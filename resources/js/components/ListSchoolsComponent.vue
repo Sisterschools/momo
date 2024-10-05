@@ -36,5 +36,14 @@ export default{
     :items="items" 
     :on-row-click="selectSchool"
     caption="Schools"
+    :sub-items="[{user: 'user.email'}]"
+    :do-not-show="['created_at', 'updated_at', 'photo']"
+    :transscribe="[
+      ['phone_number', 'phone'], 
+      ['founding_year', 'founded'],
+      ['student_capacity', '# students'], 
+      ['user', 'admin'], 
+      ['title', 'name']
+    ]"
   />
 </template>
