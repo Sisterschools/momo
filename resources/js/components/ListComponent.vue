@@ -22,7 +22,8 @@ export default{
     return {
       itemsHaveValidIds: true,
       tableClass: 'table selectableRows ' + ( this.selectableRows && this.itemsHaveValidIds ? ' selectableRows' : ''),
-      selectedIds: []
+      selectedIds: [],
+      prevSelected: null
     }
   },
   computed:{
@@ -74,28 +75,33 @@ export default{
   },
   mounted(){
     store.isListComponent = true
-    if(this.selectableRows && this.shiftClick){
-      this.$el.addEventListener( 'click', ( evnt ) => {
-        if(evnt.target.nodeName == 'input'){
-          if(evnt.shiftClick){
-            this.setPrevRowSelected(evnt.target)
-          }
-        }
-      })
-    }
   },
   
   unmounted(){
     store.isListComponent = false;
   },
   methods:{
-    setPrevRowSelected( rowEl ){
-      var prevRowEl = rowEl.closest('.row').previousSibling,
-        selId = prevRowEl.querySelector('div:not([data-src=""])')
-      if( this.selectedIds.indexOf(selId) == -1){
-        this.selectedIds.push(selId)
-        this.setPrevRowSelected( prevRowEl )
+    onShiftClick(evnt){
+      if(evnt.target.nodeName == 'INPUT'){
+        var cell = evnt.target.closest('.row').querySelector('.cell:nth-child(2)'),
+        selId = cell.getAttribute('data-src')
+        if(evnt.shiftKey){
+          selId && this.selectedIds.indexOf(selId) == -1 ? this.selectedIds.push(selId) : ''
+          this.setPrevRowSelected(evnt.target)
+        }
+        else if(selId)
+          this.prevSelected = selId
       }
+    },
+    setPrevRowSelected( rowEl ){
+      if( ! rowEl || ! rowEl.closest ) return
+      var prevRowEl = rowEl.closest('.row').previousSibling,
+        prevCell = prevRowEl && prevRowEl.querySelector ? prevRowEl.querySelector('.cell:nth-child(2)') : null,
+        selId = prevCell ? prevCell.getAttribute('data-src') : ''
+      if( selId && selId != this.prevSelected && this.selectedIds.indexOf(selId) == -1)
+         this.selectedIds.push(selId)
+      else if(selId) return
+      this.setPrevRowSelected( prevRowEl )
     },
     _onRowClick( o ){
       var id = 
@@ -177,6 +183,7 @@ export default{
             v-model="selectedIds"
             :value="items[n][id]"
             type="checkbox"
+            @click="onShiftClick"
           >
         </div>
         <div 

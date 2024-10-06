@@ -35,6 +35,7 @@ export default{
   <ListComponent 
     :items="items" 
     :selectable-rows="selectableRows"
+    :shift-click="true"
     :on-row-click="selectUser"
     caption="Users"
     :do-not-show="['created_at', 'updated_at', 'photo']"

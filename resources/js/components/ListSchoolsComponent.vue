@@ -36,6 +36,7 @@ export default{
   <ListComponent 
     :items="items"
     :selectable-rows="selectableRows"
+    :shift-click="true"
     :on-row-click="selectSchool"
     caption="Schools"
     :sub-items="[{user: 'user.email'}]" 
