@@ -4,6 +4,8 @@ import { store } from '../store.js'
 
   defineProps({
     id: {type: String, required: false, default: 'id'},
+    selectableRows: {type: Boolean, required: false, default: false},
+    shiftClick: {type: Boolean, required: false, default: false},
     showIDColumn: { type: Boolean, required: false, default: false}, 
     items: {type: Array, required: true, default: new Array},
     onRowClick: {type: Function, required: false, default: () => {}},
@@ -16,6 +18,13 @@ import { store } from '../store.js'
 
 <script>
 export default{
+  data(){
+    return {
+      itemsHaveValidIds: true,
+      tableClass: 'table selectableRows ' + ( this.selectableRows && this.itemsHaveValidIds ? ' selectableRows' : ''),
+      selectedIds: []
+    }
+  },
   computed:{
     filtered: function(){
       var objs = this.items.map( ( obj ) => {
@@ -46,25 +55,48 @@ export default{
         objs.splice( n, 1)
       this.doNotShow.forEach((fld) => {
         var m = objs.findIndex( ( o ) => o[0] == fld )
-        if( m > 0)
+        console.log(m)
+        if( m > -1 )
           objs.splice( m, 1 )
       })
       this.transscribe.forEach( ( tr ) => {
         var o = objs.findIndex(( q ) => q[0] == tr[0])
         if(o > -1)
-          objs[o][0] = tr[1]
+          objs[0][o] = tr[1]
       })
       return objs
     }
   },
+  beforeMount(){
+    this.items.forEach( ( obj ) => {
+      if( ! obj[this.id] ) this.itemsHaveValidIds = false
+    })
+  },
   mounted(){
     store.isListComponent = true
+    if(this.selectableRows && this.shiftClick){
+      this.$el.addEventListener( 'click', ( evnt ) => {
+        if(evnt.target.nodeName == 'input'){
+          if(evnt.shiftClick){
+            this.setPrevRowSelected(evnt.target)
+          }
+        }
+      })
+    }
   },
   
   unmounted(){
     store.isListComponent = false;
   },
   methods:{
+    setPrevRowSelected( rowEl ){
+      var prevRowEl = rowEl.closest('.row').previousSibling,
+        selId = prevRowEl.querySelector('div:not([data-src=""])')
+      if( this.selectedIds.indexOf(selId) == -1){
+        this.selectedIds.push(selId)
+        this.setPrevRowSelected( prevRowEl )
+      }
+    },
     _onRowClick( o ){
       var id = 
         o.target.closest('.row')
@@ -73,14 +105,32 @@ export default{
 
       if(id)
         this.onRowClick( id )
+    },
+    selectOrDeselectAll( evnt ){
+      if(! evnt.target.checked) 
+        this.selectedIds = []
+      else{
+        this.items.forEach(( i ) => {
+          this.selectedIds.push(i[this.id])
+        })
+      }
     }
-  },
+  }
 }
 </script>
 
 <template>
   <div>
-    <p>{{ caption }}</p>
+    <div class="header">
+      <div v-if="selectableRows">
+        <select :disabled="selectedIds.length == 0">
+          <option>With selected ...</option>
+        </select>
+      </div>
+      <div>
+        <p>{{ caption }}</p>
+      </div>
+    </div>
     <p v-if="items.length == 0">
       Nothing here yet: create one 
       <RouterLink :to="store.addNew">
@@ -89,12 +139,22 @@ export default{
     </p>
     <div 
       v-else
-      class="table"
+      :class="tableClass"
     >
       <div 
         v-if="items && items[0]"
         class="row" 
       >
+        <div 
+          v-if="selectableRows && itemsHaveValidIds"
+          class="cell actions"
+        >
+          <input 
+            type="checkbox" 
+            class="selectAll"
+            @change="selectOrDeselectAll"
+          >
+        </div>
         <div
           v-for="(key) in filtered0" 
           :key="key"
@@ -110,6 +170,16 @@ export default{
         @click.stop="_onRowClick" 
       >
         <div 
+          v-if="selectableRows && itemsHaveValidIds"
+          class="cell actions"
+        >
+          <input 
+            v-model="selectedIds"
+            :value="items[n][id]"
+            type="checkbox"
+          >
+        </div>
+        <div 
           v-for="(prop, index) in item"
           :key="prop"
           :data-src="items[n][id]"
@@ -123,6 +193,19 @@ export default{
 </template>
 
 <style scoped>
+.header > div{
+  float: left;
+}
+.header select{
+  padding: 0.5em 0.5em;
+}
+.header > div:nth-child(1){
+  position: absolute;
+  margin-top: 1em;
+}
+.header > div:nth-child(2){
+  width: 100%;
+}
 p{
   text-align: center;
 }

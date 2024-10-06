@@ -11,7 +11,8 @@
 export default{
   data(){
     return {
-      items: []
+      items: [],
+      selectableRows: (store.userData.data.role == "admin" || store.userData.data.role == "school")
     }
   },  
   mounted(){
@@ -33,8 +34,9 @@ export default{
 <template>
   <ListComponent 
     :items="items" 
+    :selectable-rows="selectableRows"
     :on-row-click="selectUser"
     caption="Users"
     :do-not-show="['created_at', 'updated_at', 'photo']"
-  />
+  /> 
 </template>

@@ -4,7 +4,7 @@
   import serverAPI from '../server.js'
 
   defineProps({
-    userData: { type: {}, required:  true, default: '4321'},
+    userData: { type: {}, required:  true, default: ''},
   })
 </script>
 
@@ -12,7 +12,8 @@
 export default{
   data(){
     return {
-      items: []
+      items: [],
+      selectableRows: store.userData.data.role == 'admin'
     }
   },  
   mounted(){
@@ -33,11 +34,12 @@ export default{
 
 <template>
   <ListComponent 
-    :items="items" 
+    :items="items"
+    :selectable-rows="selectableRows"
     :on-row-click="selectSchool"
     caption="Schools"
-    :sub-items="[{user: 'user.email'}]"
-    :do-not-show="['created_at', 'updated_at', 'photo']"
+    :sub-items="[{user: 'user.email'}]" 
+    :do-not-show="[]"
     :transscribe="[
       ['phone_number', 'phone'], 
       ['founding_year', 'founded'],

@@ -1,9 +1,9 @@
-var serverAPI = ( uri, vars, method = 'POST', token, contentType = 'application/x-www-form-urlencoded') => {
+var serverAPI = ( uri, vars, method = 'POST', token, contentType = 'application/x-www-form-urlencoded', putAsPost = false) => {
 
   var headers = {
     "Content-Type": contentType,
-    "Accept": "application/json"
-  }
+    "Accept": "application/json",
+  } 
 
   if( token ){
     headers["Authorization"] = "Bearer " + token
@@ -11,7 +11,16 @@ var serverAPI = ( uri, vars, method = 'POST', token, contentType = 'application/
 
   var body = new URLSearchParams(vars)
 
-  if( method == 'PUT'){
+  if(contentType == 'multipart/form-data'){
+    body = new FormData()
+    for(var i in vars){
+      body.append(i, vars[i])
+    }
+    if(putAsPost)
+      body.append('_method', 'PUT')
+  }
+
+  if( (method == 'POST' || method == 'PUT') && contentType == 'application/json'){
     body = JSON.stringify( vars )
   }
 
@@ -25,7 +34,7 @@ var serverAPI = ( uri, vars, method = 'POST', token, contentType = 'application/
     if(response.ok && response.status < 300)
       return response
     else{
-      throw("Error")
+      return Promise.reject()
     }
   })
   .then( ( response ) => response.json())

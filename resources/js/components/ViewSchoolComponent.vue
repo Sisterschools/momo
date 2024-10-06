@@ -16,7 +16,7 @@ export default{
       address: '',
       description: '',
       phone_number: '',
-      website: '',
+      website: 'http',
       founding_year: '',
       student_capacity: '',
     }
@@ -38,10 +38,12 @@ export default{
           t[i] = inp[i]
       }
     },
-    addOrUpdateSchool( id ){
+    addOrUpdateSchool(){
       var uri = '/api/schools',
         method = 'POST',
-        id = this.$route.params.id;
+        id = this.$route.params.id,
+        contentType = 'multipart/form-data',// : 'application/x-www-form-urlencoded',
+        putAsPost = id? true : false
 
       if( id ){
         uri += '/' + id
@@ -49,6 +51,7 @@ export default{
       }
       server( uri, { 
         name: this.name,
+        photo: this.photo,
         title: this.title,
         email: this.email,
         password: this.password,
@@ -60,9 +63,12 @@ export default{
         founding_year: this.founding_year,
         student_capacity: this.student_capacity,
         role: 'school' 
-      }, method, store.token, 'application/json' )
+      }, method, store.token, contentType, putAsPost )
       .then( ( ) => {
         store.router.push('/')
+      })
+      .catch( () => {
+        store.error = "An error occured."
       })
     },
   }
@@ -83,6 +89,12 @@ export default{
           required
           maxlength="255"
           autocomplete="false"
+        >
+      </label>
+      <label>
+        Photo :
+        <input 
+          type="file" 
         >
       </label>
       <label v-if="! $route.params.id">

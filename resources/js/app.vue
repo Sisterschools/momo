@@ -3,7 +3,9 @@ import "external-svg-loader";
 import { store } from './store.js'
 import school from '../svg/school.svg';
 import student from '../svg/student.svg'
+import teacher from '../svg/teacher.svg'
 
+import ErrorPopup from './components/ErrorPopupComponent.vue';
 import UserMenu from './components/UserMenuComponent.vue';
 
 </script>
@@ -44,7 +46,15 @@ export default{
           :data-src="school" 
           class="icon" 
         />
-      </RouterLink>&nbsp;
+      </RouterLink>
+      &nbsp;
+      <RouterLink to="/list-users">
+        <svg 
+          :data-src="teacher" 
+          class="icon"
+        />
+      </RouterLink>
+      &nbsp;
       <RouterLink to="/list-users">
         <svg 
           :data-src="student" 
@@ -67,5 +77,6 @@ export default{
         />
       </RouterView>
     </main>
+    <ErrorPopup />
   </div>
 </template>

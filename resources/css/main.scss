@@ -96,6 +96,10 @@ input:focus{
         padding: 0.5em 1em;
         box-sizing: border-box;
     }
+    input:focus,
+    select:focus{
+      outline: 1px solid var(--momo-blue);
+    }
     .header div.user-details > ul{
         width: 10em;
         box-sizing: border-box;
@@ -120,6 +124,10 @@ input:focus{
     .clr-border-left-admin,
     .clr-border-left-admin ul{
         box-shadow:2px 0 0 0 var(--momo-red) inset;
+    }
+    .clr-border-left-school,
+    .clr-border-left-school ul{
+        box-shadow:2px 0 0 0 var(--momo-purple) inset;
     }
     .clr-border-left-teacher,
     .clr-border-left-teacher ul{

@@ -9,6 +9,22 @@
     max-width: 100%;
     width: 100%;
     border-bottom: 2px solid var(--momo-blue);
+    border-right: 2px solid var(--momo-blue); 
+  }
+  .row:nth-child(1){
+    background-color: var(--momo-blue);
+  }
+  .cell.actions{
+    padding-right: 0.5em;
+    max-width: 20px;
+  }
+  .cell.actions input{
+    width: 2em;
+    accent-color: var(--momo-blue);
+    color: var(--momo-white);
+  }
+  .cell.actions input:focus{
+    outline: none;
   }
   .cell{
     display: block;
@@ -17,7 +33,8 @@
     min-height:calc(2em + 2px);
     flex: 1;
     padding: 0.25em;
-    border: 1px solid var(--momo-blue);
+    border-top: 1px solid var(--momo-blue);
+    border-right: 1px solid var(--momo-blue);
     word-wrap: break-word;
   }
   .cell:not(.expand){
@@ -27,61 +44,116 @@
   .row:nth-child(1) .cell{
     text-align: center;
     text-transform: capitalize;
-    background-color: var(--momo-blue);
     filter:grayscale(25%);
   }
   .row:nth-child(1) > div.cell{
     color: var(--momo-white);
+  }
+
+  .selectableRows div.cell:nth-child(1):nth-last-child(12),
+  .selectableRows div.cell:nth-child(1):nth-last-child(12) ~ div.cell{
+    min-width: calc(9.090909% - (40px / 11));
+    max-width: calc(9.090909% - (40px / 11));
   }
   div.cell:nth-child(1):nth-last-child(12),
   div.cell:nth-child(1):nth-last-child(12) ~ div.cell{
     min-width: 8.3333%;
     max-width: 8.3333%;
   }
+  .selectableRows div.cell:nth-child(1):nth-last-child(11),
+  .selectableRows div.cell:nth-child(1):nth-last-child(11) ~ div.cell{
+    min-width: calc(10% - (40px / 10));
+    max-width: calc(10% - (40px / 10));
+  }
   div.cell:nth-child(1):nth-last-child(11),
   div.cell:nth-child(1):nth-last-child(11) ~ div.cell{
     min-width: 9.0909%;
     max-width: 9.0909%;
+  }
+  .selectableRows .cell:nth-child(1):nth-last-child(10),
+  .selectableRows .cell:nth-child(1):nth-last-child(10) ~ div.cell{
+    min-width: calc(11.11111% - (40px / 9));
+    max-width: calc(11.11111% - (40px / 9));
   }
   div.cell:nth-child(1):nth-last-child(10),
   div.cell:nth-child(1):nth-last-child(10) ~ div.cell{
     min-width: 10%;
     max-width: 10%;
   }
+  .selectableRows div.cell:nth-child(1):nth-last-child(9),
+  .selectableRows div.cell:nth-child(1):nth-last-child(9) ~ div.cell{
+    min-width: calc(12.5% - (40px / 8));
+    max-width: calc(12.5% - (40px / 8)); 
+  }
   div.cell:nth-child(1):nth-last-child(9),
   div.cell:nth-child(1):nth-last-child(9) ~ div.cell{
     min-width: 11.11111%;
-    max-width: 11.11111%;
+    max-width: 11.11111%; 
+  }
+  .selectableRows div.cell:nth-child(1):nth-last-child(8),
+  .selectableRows div.cell:nth-child(1):nth-last-child(8) ~ div.cell{
+    min-width: calc(14.2857% - (40px / 7));
+    max-width: calc(14.2857% - (40px / 7));
   }
   div.cell:nth-child(1):nth-last-child(8),
   div.cell:nth-child(1):nth-last-child(8) ~ div.cell{
     min-width: 12.5%;
     max-width: 12.5%;
   }
+  .selectableRows div.cell:nth-child(1):nth-last-child(7),
+  .selectableRows div.cell:nth-child(1):nth-last-child(7) ~ div.cell{
+    min-width: calc(16.66667% - (40px / 6));
+    max-width: calc(16.66667% - (40px / 6));
+  }
   div.cell:nth-child(1):nth-last-child(7),
   div.cell:nth-child(1):nth-last-child(7) ~ div.cell{
     min-width: 14.2857%;
     max-width: 14.2857%;
+  }
+  .selectableRows div.cell:nth-child(1):nth-last-child(6),
+  .selectableRows div.cell:nth-child(1):nth-last-child(6) ~ div.cell{
+    min-width: calc(20% - (40px / 5));
+    max-width: calc(20% - (40px / 5));;
   }
   div.cell:nth-child(1):nth-last-child(6),
   div.cell:nth-child(1):nth-last-child(6) ~ div.cell{
     min-width: 16.66667%;
     max-width: 16.66667%;
   }
+  .selectableRows div.cell:nth-child(1):nth-last-child(5),
+  .selectableRows div.cell:nth-child(1):nth-last-child(5) ~ div.cell{
+    min-width: calc(25% - ( 40px / 4));
+    max-width: calc(25% - ( 40px / 4));
+  }
   div.cell:nth-child(1):nth-last-child(5),
   div.cell:nth-child(1):nth-last-child(5) ~ div.cell{
     min-width: 20%;
     max-width: 20%;
+  }
+  .selectableRows div.cell:nth-child(1):nth-last-child(4),
+  .selectableRows div.cell:nth-child(1):nth-last-child(4) ~ div.cell{
+    min-width: calc(33.33333% - (40px / 3));
+    max-width: calc(33.33333% - (40px / 3))
   }
   div.cell:nth-child(1):nth-last-child(4),
   div.cell:nth-child(1):nth-last-child(4) ~ div.cell{
     min-width: 25%;
     max-width: 25%;
   }
+  .selectableRows div.cell:nth-child(1):nth-last-child(3),
+  .selectableRows div.cell:nth-child(1):nth-last-child(3) ~ div.cell{
+    min-width: calc(50% - (40px / 2));
+    max-width: calc(50% - (40px / 2));
+  }
   div.cell:nth-child(1):nth-last-child(3),
   div.cell:nth-child(1):nth-last-child(3) ~ div.cell{
     min-width: 33.333333%;
     max-width: 33.333333%;
+  }
+  .selectableRows div.cell:nth-child(1):nth-last-child(2),
+  .selectableRows div.cell:nth-child(1):nth-last-child(2) ~ div.cell{
+    min-width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
   }
   div.cell:nth-child(1):nth-last-child(2),
   div.cell:nth-child(1):nth-last-child(2) ~ div.cell{
@@ -92,6 +164,12 @@
   div.cell:nth-child(1):nth-last-child(1) ~ div.cell{
     min-width: 100%;
     max-width: 100%;
+  }
+  .table.selectableRows div.cell.actions{
+    padding-right: 0.5em;
+    max-width: 40px;
+    min-width: 40px;
+    overflow: hidden;
   }
 
   @media screen and (max-width: 600px){
@@ -104,64 +182,133 @@
     .row > div.cell:nth-child(1):nth-last-child(7){
       min-height: calc(6em + 4px);
     }
-    .row > div.cell:nth-child(1):nth-last-child(9){
+    .row > div.cell:nth-child(1):nth-last-child(9):not(.actions){
       min-height: calc(7em + 3px);
     }
-    .row > div.cell:nth-child(1):nth-last-child(10){
+    .row > div.cell:nth-child(1):nth-last-child(10):not(.actions){
       min-height: calc(4.5em - 2px);
     }
-    .row > div.cell:nth-child(1):nth-last-child(11){
+    .row > div.cell:nth-child(1):nth-last-child(11):not(.actions){
       min-height: calc(4em + 4px);
     }
-    div.cell:nth-child(1):nth-last-child(12),
-    div.cell:nth-child(1):nth-last-child(12) ~ div.cell{
+    .selectableRows div.cell:nth-child(1):nth-last-child(12),
+    .selectableRows div.cell:nth-child(1):nth-last-child(12) ~ div.cell{
       min-width: 33.33333%;
       max-width: 33.33333%;
+    }
+    div.cell:nth-child(1):nth-last-child(12),
+    div.cell:nth-child(1):nth-last-child(12) + div + div{
+      min-width: calc(9.090909% - (40px / 3));
+      max-width: calc(9.090909% - (40px / 3));
+    }
+    .selectableRows div.cell:nth-child(1):nth-last-child(11),
+    .selectableRows div.cell:nth-child(1):nth-last-child(11) ~ div.cell{
+      min-width: 33.3333%;
+      max-width: 33.3333%;
+    }
+    .selectableRows div.cell:nth-child(1):nth-last-child(11),
+    .selectableRows div.cell:nth-child(1):nth-last-child(11) + div + div{
+      min-width: calc(33.3333% - (40px / 3));
+      max-width: calc(33.3333% - (40px / 3));
     }
     div.cell:nth-child(1):nth-last-child(11),
     div.cell:nth-child(1):nth-last-child(11) ~ div.cell{
       min-width: 33.33333%;
       max-width: 33.33333%;
     }
-    div.cell:nth-child(1):nth-last-child(10),
-    div.cell:nth-child(1):nth-last-child(10) ~ div.cell{
-      min-width: 3 * 10%;
-      max-width: 3 * 10%;
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(10) + div,
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(10) + div + div{
+      min-width: calc(33.3333% - (40px / 2));
+      max-width: calc(33.3333% - (40px / 2));
+    }
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(10),
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(10) ~ div.cell{
+      min-width: 33.3333%;
+      max-width: 33.3333%;
+    }
+    .selectableRows div.cell:nth-child(1):nth-last-child(9),
+    .selectableRows div.cell:nth-child(1):nth-last-child(9) ~ div.cell{
+      min-width: 33.3333%;
+      max-width: 33.3333%; 
+    }
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(9) + div{
+      min-width: calc(33.3333% - 40px);
+      max-width: calc(33.3333% - 40px); 
     }
     div.cell:nth-child(1):nth-last-child(9),
     div.cell:nth-child(1):nth-last-child(9) ~ div.cell{
       min-width: 50%;
       max-width: 50%;
     }
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(8),
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(8) ~ div.cell{
+      min-width: calc(33.3333% - (40px / 6));
+      max-width: calc(33.3333% - (40px / 6));
+    }
     div.cell:nth-child(1):nth-last-child(8),
     div.cell:nth-child(1):nth-last-child(8) ~ div.cell{
       min-width: 33.3333%;
       max-width: 3.33333%;
     }
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(7),
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(7) ~ div.cell{
+      min-width: calc(33.3333% - (40px / 6));
+      max-width: calc(33.3333% - (40px / 6));
+    }
     div.cell:nth-child(1):nth-last-child(7),
     div.cell:nth-child(1):nth-last-child(7) ~ div.cell{
-      min-width: 3 * 14.2857%;
-      max-width: 3 * 14.2857%;
+      min-width: 33.33333%;
+      max-width: 33.33333%;
+    }
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(6),
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(6) ~ div.cell{
+      min-width: calc(50% - (40px / 5));
+      max-width: calc(50% - (40px / 5));;
     }
     div.cell:nth-child(1):nth-last-child(6),
     div.cell:nth-child(1):nth-last-child(6) ~ div.cell{
-      min-width: 3 * 16.66667%;
-      max-width: 3 * 16.66667%;
+      min-width: 33.3333%;
+      max-width: 33.3333%;
+    }
+    .selectableRows div.cell:nth-child(1):nth-last-child(5),
+    .selectableRows div.cell:nth-child(1):nth-last-child(5) ~ div.cell{
+      min-width: calc(50% - ( 40px / 4));
+      max-width: calc(50% - ( 40px / 4));
+    }
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(5),
+    .selectableRows div.cell.actions:nth-child(1):nth-last-child(5) ~ div.cell{
+      min-width: calc(50% - ( 40px / 4));
+      max-width: calc(50% - ( 40px / 4));
     }
     div.cell:nth-child(1):nth-last-child(5),
     div.cell:nth-child(1):nth-last-child(5) ~ div.cell{
-      min-width: 2 * 25%;
-      max-width: 2 * 25%;
+      min-width: 33.3333%;
+      max-width: 33.3333%;
+    }
+    .selectableRows div.cell:nth-child(1):nth-last-child(4),
+    .selectableRows div.cell:nth-child(1):nth-last-child(4) ~ div.cell{
+      min-width: calc(50% - (40px / 2));
+      max-width: calc(50% - (40px / 2))
     }
     div.cell:nth-child(1):nth-last-child(4),
     div.cell:nth-child(1):nth-last-child(4) ~ div.cell{
       min-width: 2 * 25%;
       max-width: 2 * 25%;
     }
+    .selectableRows div.cell:nth-child(1):nth-last-child(3),
+    .selectableRows div.cell:nth-child(1):nth-last-child(3) ~ div.cell{
+      min-width: calc(50% - (40px / 2));
+      max-width: calc(50% - (40px / 2));
+    }
     div.cell:nth-child(1):nth-last-child(3),
     div.cell:nth-child(1):nth-last-child(3) ~ div.cell{
       min-width: 50%;
       max-width: 50%;
+    }
+    .selectableRows div.cell:nth-child(1):nth-last-child(2),
+    .selectableRows div.cell:nth-child(1):nth-last-child(2) ~ div.cell{
+      min-width: calc(100% - 40px);
+      max-width: calc(100% - 40px);
     }
     div.cell:nth-child(1):nth-last-child(2),
     div.cell:nth-child(1):nth-last-child(2) ~ div.cell{
@@ -172,6 +319,13 @@
     div.cell:nth-child(1):nth-last-child(1) ~ div.cell{
       min-width: 100%;
       max-width: 100%;
+    }
+    .table.selectableRows div.cell.actions{
+      padding-right: 0.5em;
+      max-width: 40px;
+      min-width: 40px;
+      max-height: 1.5em;
+      overflow: hidden;
     }
   }
 }
