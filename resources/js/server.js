@@ -11,7 +11,7 @@ var serverAPI = ( uri, vars, method = 'POST', token, contentType = 'application/
 
   var body = new URLSearchParams(vars)
 
-  if(contentType == 'multipart/form-data'){
+  if(contentType == ''){
     body = new FormData()
     for(var i in vars){
       body.append(i, vars[i])
@@ -29,13 +29,12 @@ var serverAPI = ( uri, vars, method = 'POST', token, contentType = 'application/
     headers,
     ...((method == 'POST' || method == 'PUT') && {body}) 
   } )
-  .catch( console.log )
   .then( ( response ) => {
+    if( ! response.ok ){
+      return Promise.reject(response.json())
+    }
     if(response.ok && response.status < 300)
       return response
-    else{
-      return Promise.reject()
-    }
   })
   .then( ( response ) => response.json())
 }
