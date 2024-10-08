@@ -3,8 +3,11 @@
 </script>
 
 <template>
-  <div v-if="store.error">
-    <p>{{ store.error }}</p>
+  <div 
+    v-if="store.error"
+  >
+    <h3>{{ store.errorMsgHeader }}</h3>
+    <p>{{ store.errorMsgTxt }}</p>
     <button @click="store.error = false">
       Close
     </button>
@@ -13,7 +16,7 @@
 
 <style scoped>
   div{
-    position: absolute;
+    position: fixed;
     top: 20vh;
     width: 24em;
     left: calc(50vw - 12.75em);

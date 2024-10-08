@@ -22,7 +22,7 @@ export default{
       class="name"
       @click.stop="expand"
     >
-      <span class="expandable"/>
+      <span class="expandable" />
       {{ user.name }}
     </li>
     <li>

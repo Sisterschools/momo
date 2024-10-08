@@ -43,7 +43,7 @@ export default{
       founding_year:{ as:'founded'}, 
       student_capacity:{ as:'# students'}, 
       user:{ as:'admin', subItem:{user: 'user.email'}}, 
-       photo:{ }, 
+      photo:{ }, 
       address:{ }, 
       description:{ },
       created_at:{ type:'date', visible:false}, 

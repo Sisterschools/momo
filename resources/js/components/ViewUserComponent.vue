@@ -1,4 +1,7 @@
 <script setup>
+  import server from '../server.js'
+  import  { store } from '../store.js'
+  import Form from './FormComponent.vue'
 </script>
 
 <script>

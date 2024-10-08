@@ -1,5 +1,6 @@
 <script setup>
 import server from '../server.js'
+import makeErrorMsg from '../makeErrorMsg.js'
 import  { store } from '../store.js'
 import Form from './FormComponent.vue'
 </script>
@@ -42,16 +43,16 @@ export default{
       var uri = '/api/schools',
         method = 'POST',
         id = this.$route.params.id,
-        contentType = 'multipart/form-data',// : 'application/x-www-form-urlencoded',
+        contentType = id ? '' : 'application/x-www-form-urlencoded',
         putAsPost = id? true : false
 
       if( id ){
         uri += '/' + id
         method = 'PUT'
       }
-      server( uri, { 
+
+      var data = { 
         name: this.name,
-        photo: this.photo,
         title: this.title,
         email: this.email,
         password: this.password,
@@ -63,13 +64,16 @@ export default{
         founding_year: this.founding_year,
         student_capacity: this.student_capacity,
         role: 'school' 
-      }, method, store.token, contentType, putAsPost )
+      }
+
+      if(typeof this.photo != 'undefined' )
+        data = Object.assign(data, {photo: this.photo})
+
+      server( uri, data, method, store.token, contentType, putAsPost )
       .then( ( ) => {
         store.router.push('/')
       })
-      .catch( () => {
-        store.error = "An error occured."
-      })
+      .catch(makeErrorMsg)
     },
   }
 }
