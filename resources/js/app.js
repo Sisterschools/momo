@@ -11,18 +11,28 @@ import { createWebHashHistory, createRouter } from 'vue-router'
 import ResetPassword from './components/ResetPasswordComponent.vue'
 
 const routes = [
-    { path: '/', component: Layout },
+    { path: '/', name:'home', component: Layout },
     { path: '/reset-password', component: ResetPassword },
     { path: '/list-schools', component: ListSchools },
     { path: '/view-school/:id', name:'viewschool', component: ViewSchool },
     { path: '/schools/add', name:'addschool', component: ViewSchool },
     { path: '/list-users', component: ListUsers},
-    { path: '/view-user/:id', name:'viewuser', component: ViewUser }
+    { path: '/view-user/:id', name:'viewuser', component: ViewUser },
+    { path: '/user/add', name:'adduser', component: ViewUser },
   ]  
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+})
+
+router.beforeEach(async (to) => {
+  if (
+    !store.token &&
+    to.name !== 'home'
+  ) {
+    return { name: 'home' }
+  }
 })
 
 store.router = router;
