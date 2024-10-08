@@ -35,6 +35,12 @@ export default{
           this.invalid = false
           store.token = json.access_token
           store.userData = json
+          
+          /*  
+            Different users can login using a different tab: so start the title with their name
+          */
+          var title = document.querySelector('title').innerText
+          document.querySelector('title').innerText = json.data.name + ' : ' + title
         }
       })
     }
