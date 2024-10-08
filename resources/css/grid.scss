@@ -1,3 +1,6 @@
+@use 'sass:math';
+@import 'variables';
+
 #app main div{
   .table{
     width: 100%;
@@ -26,20 +29,24 @@
   .cell.actions input:focus{
     outline: none;
   }
-  .cell{
+  .cell,
+  .actions{
     display: block;
     box-sizing: border-box;
     float: left;
     min-height:calc(2em + 2px);
     flex: 1;
     padding: 0.25em;
-    border-top: 1px solid var(--momo-blue);
+    border-bottom: 1px solid var(--momo-blue);
     border-right: 1px solid var(--momo-blue);
     word-wrap: break-word;
   }
   .cell:not(.expand){
     max-height: calc(2em + 2px);
     overflow-y: auto;
+  }
+  .cell.hide{
+    display: none;
   }
   .row:nth-child(1) .cell{
     text-align: center;
@@ -50,282 +57,356 @@
     color: var(--momo-white);
   }
 
+
+  /*
+    Fall back to older selectors
+  */
+
+  .selectableRows .row div:nth-child(1):nth-last-child(13),
+  .selectableRows .row div:nth-child(1):nth-last-child(13) ~ div.cell{
+    min-width: calc(100% / 12 - ($action-column-width / 12));
+    max-width: calc(100% / 12 - ($action-column-width / 12));
+  }
+  .row div:nth-child(1):nth-last-child(13),
+  .row div:nth-child(1):nth-last-child(13) ~ div{
+    min-width: math.percentage(math.div(100, 13));
+    max-width: math.percentage(math.div(100, 13));
+  }
+
   .selectableRows div.cell:nth-child(1):nth-last-child(12),
-  .selectableRows div.cell:nth-child(1):nth-last-child(12) ~ div.cell{
-    min-width: calc(9.090909% - (40px / 11));
-    max-width: calc(9.090909% - (40px / 11));
+  .selectableRows .row div:nth-child(1):nth-last-child(12) ~ div.cell{
+    min-width: calc(100% / 11 - ($action-column-width / 11));
+    max-width: calc(100% / 11 - ($action-column-width / 11));
   }
   div.cell:nth-child(1):nth-last-child(12),
   div.cell:nth-child(1):nth-last-child(12) ~ div.cell{
-    min-width: 8.3333%;
-    max-width: 8.3333%;
+    min-width: 100% / 12;
+    max-width: 100% / 12;
   }
+
   .selectableRows div.cell:nth-child(1):nth-last-child(11),
   .selectableRows div.cell:nth-child(1):nth-last-child(11) ~ div.cell{
-    min-width: calc(10% - (40px / 10));
-    max-width: calc(10% - (40px / 10));
+    min-width: calc(10% - ($action-column-width / 10));
+    max-width: calc(10% - ($action-column-width / 10));
   }
   div.cell:nth-child(1):nth-last-child(11),
   div.cell:nth-child(1):nth-last-child(11) ~ div.cell{
-    min-width: 9.0909%;
-    max-width: 9.0909%;
+    min-width: 11%;
+    max-width: 11%;
   }
-  .selectableRows .cell:nth-child(1):nth-last-child(10),
-  .selectableRows .cell:nth-child(1):nth-last-child(10) ~ div.cell{
-    min-width: calc(11.11111% - (40px / 9));
-    max-width: calc(11.11111% - (40px / 9));
+
+  .selectableRows .row div:nth-child(1):nth-last-child(10),
+  .selectableRows .row div:nth-child(1):nth-last-child(10) ~ div.cell{
+    min-width: calc(100% / 9 - $action-column-width / 9);
+    max-width: calc(100% / 9 - $action-column-width / 9);
   }
-  div.cell:nth-child(1):nth-last-child(10),
-  div.cell:nth-child(1):nth-last-child(10) ~ div.cell{
-    min-width: 10%;
-    max-width: 10%;
+
+  .row div:nth-child(1):nth-last-child(10),
+  .row div:nth-child(1):nth-last-child(10) ~ div.cell{
+    min-width: 100% / 10;
+    max-width: 100% / 10;
   }
+
   .selectableRows div.cell:nth-child(1):nth-last-child(9),
   .selectableRows div.cell:nth-child(1):nth-last-child(9) ~ div.cell{
-    min-width: calc(12.5% - (40px / 8));
-    max-width: calc(12.5% - (40px / 8)); 
+    min-width: calc(100% / 8 - ($action-column-width / 8));
+    max-width: calc(100% / 8 - ($action-column-width / 8)); 
   }
   div.cell:nth-child(1):nth-last-child(9),
   div.cell:nth-child(1):nth-last-child(9) ~ div.cell{
-    min-width: 11.11111%;
-    max-width: 11.11111%; 
+    min-width: 100% / 9;
+    max-width: 100% / 9; 
   }
+
   .selectableRows div.cell:nth-child(1):nth-last-child(8),
   .selectableRows div.cell:nth-child(1):nth-last-child(8) ~ div.cell{
-    min-width: calc(14.2857% - (40px / 7));
-    max-width: calc(14.2857% - (40px / 7));
+    min-width: calc(100% / 7 - ($action-column-width / 7));
+    max-width: calc(100% / 7 - ($action-column-width / 7));
   }
   div.cell:nth-child(1):nth-last-child(8),
   div.cell:nth-child(1):nth-last-child(8) ~ div.cell{
-    min-width: 12.5%;
-    max-width: 12.5%;
+    min-width: 100% / 8;
+    max-width: 100% / 8;
   }
+
   .selectableRows div.cell:nth-child(1):nth-last-child(7),
   .selectableRows div.cell:nth-child(1):nth-last-child(7) ~ div.cell{
-    min-width: calc(16.66667% - (40px / 6));
-    max-width: calc(16.66667% - (40px / 6));
+    min-width: calc(100% / 6 - ($action-column-width / 6));
+    max-width: calc(100% / 6 - ($action-column-width / 6));
   }
   div.cell:nth-child(1):nth-last-child(7),
   div.cell:nth-child(1):nth-last-child(7) ~ div.cell{
-    min-width: 14.2857%;
-    max-width: 14.2857%;
+    min-width: 100% / 7;
+    max-width: 100% / 7;
   }
+
   .selectableRows div.cell:nth-child(1):nth-last-child(6),
   .selectableRows div.cell:nth-child(1):nth-last-child(6) ~ div.cell{
-    min-width: calc(20% - (40px / 5));
-    max-width: calc(20% - (40px / 5));;
+    min-width: calc(100% / 5 - ($action-column-width / 5));
+    max-width: calc(100% / 5 - ($action-column-width / 5));;
   }
   div.cell:nth-child(1):nth-last-child(6),
   div.cell:nth-child(1):nth-last-child(6) ~ div.cell{
-    min-width: 16.66667%;
-    max-width: 16.66667%;
+    min-width: 100% / 6;
+    max-width: 100% / 6;
   }
+
   .selectableRows div.cell:nth-child(1):nth-last-child(5),
   .selectableRows div.cell:nth-child(1):nth-last-child(5) ~ div.cell{
-    min-width: calc(25% - ( 40px / 4));
-    max-width: calc(25% - ( 40px / 4));
+    min-width: calc(100% / 4 - ( $action-column-width / 4));
+    max-width: calc(100% / 4 - ( $action-column-width / 4));
   }
   div.cell:nth-child(1):nth-last-child(5),
   div.cell:nth-child(1):nth-last-child(5) ~ div.cell{
-    min-width: 20%;
-    max-width: 20%;
+    min-width: 100% / 5;
+    max-width: 100% / 5;
   }
-  .selectableRows div.cell:nth-child(1):nth-last-child(4),
-  .selectableRows div.cell:nth-child(1):nth-last-child(4) ~ div.cell{
-    min-width: calc(33.33333% - (40px / 3));
-    max-width: calc(33.33333% - (40px / 3))
+
+  .selectableRows .cell.actions:nth-child(1):nth-last-child(4),
+  .selectableRows .cell.actions:nth-child(1):nth-last-child(4) ~ div.cell{
+    min-width: calc(100% / 3 - ($action-column-width / 3));
+    max-width: calc(100% / 3 - ($action-column-width / 3));
   }
   div.cell:nth-child(1):nth-last-child(4),
   div.cell:nth-child(1):nth-last-child(4) ~ div.cell{
-    min-width: 25%;
-    max-width: 25%;
+    min-width: 100% / 4;
+    max-width: 100% / 4;
   }
-  .selectableRows div.cell:nth-child(1):nth-last-child(3),
-  .selectableRows div.cell:nth-child(1):nth-last-child(3) ~ div.cell{
-    min-width: calc(50% - (40px / 2));
-    max-width: calc(50% - (40px / 2));
+
+  .selectableRows div.cell.actions:nth-child(1):nth-last-child(3),
+  .selectableRows div.cell.actions:nth-child(1):nth-last-child(3) ~ div.cell{
+    min-width: calc(100% / 4 - $action-column-width);
+    max-width: calc(100% / 2 - $action-column-width);
   }
   div.cell:nth-child(1):nth-last-child(3),
   div.cell:nth-child(1):nth-last-child(3) ~ div.cell{
-    min-width: 33.333333%;
-    max-width: 33.333333%;
+    min-width: 100% / 3;
+    max-width: 100% / 3;
   }
+
   .selectableRows div.cell:nth-child(1):nth-last-child(2),
-  .selectableRows div.cell:nth-child(1):nth-last-child(2) ~ div.cell{
-    min-width: calc(100% - 40px);
-    max-width: calc(100% - 40px);
+  .selectableRows .cell:nth-child(1):nth-last-child(2) ~ div.cell{
+    min-width: calc(100% - $action-column-width);
+    max-width: calc(100% - $action-column-width);
   }
   div.cell:nth-child(1):nth-last-child(2),
   div.cell:nth-child(1):nth-last-child(2) ~ div.cell{
-    min-width: 50%;
-    max-width: 50%;
+    min-width: 100% / 2;
+    max-width: 100% / 2;
   }
+
   div.cell:nth-child(1):nth-last-child(1),
   div.cell:nth-child(1):nth-last-child(1) ~ div.cell{
     min-width: 100%;
     max-width: 100%;
   }
-  .table.selectableRows div.cell.actions{
+  .table.selectableRows .row div:nth-child(1).actions{
     padding-right: 0.5em;
-    max-width: 40px;
-    min-width: 40px;
+    max-width: $action-column-width !important;
+    min-width: $action-column-width !important; 
+    max-height: 1.5em;
     overflow: hidden;
   }
 
-  @media screen and (max-width: 600px){
-    .row > div.cell:nth-child(1):nth-last-child(3){
-      min-height: calc(4em + 3px);
+  /*
+    When the screen is small start displaying multiple lines per row. If showing 12 columns as 4 columns every row has
+    3 lines. Need to compensate for the actions column in the .firstVisible column so the columns divide the screen nicely.
+  */
+
+
+  @media screen and (max-width: calc(120em)) {
+    .row div:nth-child(1):nth-last-child(13),
+    .row div:nth-child(1):nth-last-child(13) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(13),
+    .selectableRows .row div:nth-child(1):nth-last-child(13) ~ div.cell{
+      min-width: 25%;
+      max-width: 25%;
     }
-    .row > div.cell:nth-child(1):nth-last-child(5){
-      min-height: calc(2em + 3px);
+    .selectableRows .actions:nth-child(1):nth-last-child(13) ~ div.firstVisible{
+      min-width: calc(25% - $action-column-width);
+      max-width: calc(25% - $action-column-width);
     }
-    .row > div.cell:nth-child(1):nth-last-child(7){
-      min-height: calc(6em + 4px);
-    }
-    .row > div.cell:nth-child(1):nth-last-child(9):not(.actions){
-      min-height: calc(7em + 3px);
-    }
-    .row > div.cell:nth-child(1):nth-last-child(10):not(.actions){
-      min-height: calc(4.5em - 2px);
-    }
-    .row > div.cell:nth-child(1):nth-last-child(11):not(.actions){
-      min-height: calc(4em + 4px);
-    }
-    .selectableRows div.cell:nth-child(1):nth-last-child(12),
-    .selectableRows div.cell:nth-child(1):nth-last-child(12) ~ div.cell{
+
+    .row div:nth-child(1):nth-last-child(12),
+    .row div:nth-child(1):nth-last-child(12) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(12),
+    .selectableRows .row div:nth-child(1):nth-last-child(12) ~ div.cell{
       min-width: 33.33333%;
       max-width: 33.33333%;
     }
-    div.cell:nth-child(1):nth-last-child(12),
-    div.cell:nth-child(1):nth-last-child(12) + div + div{
-      min-width: calc(9.090909% - (40px / 3));
-      max-width: calc(9.090909% - (40px / 3));
+    .selectableRows .actions:nth-child(1):nth-last-child(12) ~ div.firstVisible{
+      min-width: calc(33.3333% - $action-column-width);
+      max-width: calc(33.3333% - $action-column-width);
     }
-    .selectableRows div.cell:nth-child(1):nth-last-child(11),
-    .selectableRows div.cell:nth-child(1):nth-last-child(11) ~ div.cell{
-      min-width: 33.3333%;
-      max-width: 33.3333%;
-    }
-    .selectableRows div.cell:nth-child(1):nth-last-child(11),
-    .selectableRows div.cell:nth-child(1):nth-last-child(11) + div + div{
-      min-width: calc(33.3333% - (40px / 3));
-      max-width: calc(33.3333% - (40px / 3));
-    }
-    div.cell:nth-child(1):nth-last-child(11),
-    div.cell:nth-child(1):nth-last-child(11) ~ div.cell{
+
+    .row div:nth-child(1):nth-last-child(11),
+    .row div:nth-child(1):nth-last-child(11) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(11),
+    .selectableRows .row div:nth-child(1):nth-last-child(11) ~ div.cell{
       min-width: 33.33333%;
       max-width: 33.33333%;
     }
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(10) + div,
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(10) + div + div{
-      min-width: calc(33.3333% - (40px / 2));
-      max-width: calc(33.3333% - (40px / 2));
+    .selectableRows .actions:nth-child(1):nth-last-child(11) ~ div.firstVisible{
+      min-width: calc(33.3333% - $action-column-width);
+      max-width: calc(33.3333% - $action-column-width);
     }
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(10),
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(10) ~ div.cell{
+
+    .row div:nth-child(1):nth-last-child(10),
+    .row div:nth-child(1):nth-last-child(10) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(10),
+    .selectableRows .row div:nth-child(1):nth-last-child(10) ~ div.cell{
+      min-width: 20%;
+      max-width: 20%;
+    }
+    .selectableRows .actions:nth-child(1):nth-last-child(10) ~ div.firstVisible{
+      min-width: calc(20% - $action-column-width);
+      max-width: calc(20% - $action-column-width);
+    }
+  }
+
+  @media screen and (max-width: calc(80em)){
+    .row div:nth-child(1):nth-last-child(13),
+    .row div:nth-child(1):nth-last-child(13) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(13),
+    .selectableRows .row div:nth-child(1):nth-last-child(13) ~ div.cell{
       min-width: 33.3333%;
       max-width: 33.3333%;
     }
-    .selectableRows div.cell:nth-child(1):nth-last-child(9),
-    .selectableRows div.cell:nth-child(1):nth-last-child(9) ~ div.cell{
-      min-width: 33.3333%;
-      max-width: 33.3333%; 
+    .selectableRows .row .actions:nth-child(1):nth-last-child(13) ~ div.firstVisible{
+      min-width: calc(33.3333% - $action-column-width);
+      max-width: calc(33.3333% - $action-column-width);
     }
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(9) + div{
-      min-width: calc(33.3333% - 40px);
-      max-width: calc(33.3333% - 40px); 
+
+    .row div:nth-child(1):nth-last-child(12),
+    .row div:nth-child(1):nth-last-child(12) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(12),
+    .selectableRows .row div:nth-child(1):nth-last-child(12) ~ div.cell{
+      min-width: 25%;
+      max-width: 25%;
     }
-    div.cell:nth-child(1):nth-last-child(9),
-    div.cell:nth-child(1):nth-last-child(9) ~ div.cell{
-      min-width: 50%;
-      max-width: 50%;
+    .selectableRows .row .actions:nth-child(1):nth-last-child(12) ~ div.firstVisible{
+      min-width: calc(25% - $action-column-width);
+      max-width: calc(25% - $action-column-width);
     }
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(8),
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(8) ~ div.cell{
-      min-width: calc(33.3333% - (40px / 6));
-      max-width: calc(33.3333% - (40px / 6));
+
+    .row div:nth-child(1):nth-last-child(11),
+    .row div:nth-child(1):nth-last-child(11) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(11),
+    .selectableRows .row div:nth-child(1):nth-last-child(11) ~ div.cell{
+      min-width: 25%;
+      max-width: 25%;
     }
-    div.cell:nth-child(1):nth-last-child(8),
-    div.cell:nth-child(1):nth-last-child(8) ~ div.cell{
-      min-width: 33.3333%;
-      max-width: 3.33333%;
+    .selectableRows .row .actions:nth-child(1):nth-last-child(11) ~ div.firstVisible{
+      min-width: calc(25% - $action-column-width);
+      max-width: calc(25% - $action-column-width);
     }
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(7),
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(7) ~ div.cell{
-      min-width: calc(33.3333% - (40px / 6));
-      max-width: calc(33.3333% - (40px / 6));
+
+    .row div:nth-child(1):nth-last-child(10),
+    .row div:nth-child(1):nth-last-child(10) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(10),
+    .selectableRows .row div:nth-child(1):nth-last-child(10) ~ div.cell{
+      min-width: 20%;
+      max-width: 20%;
     }
-    div.cell:nth-child(1):nth-last-child(7),
-    div.cell:nth-child(1):nth-last-child(7) ~ div.cell{
-      min-width: 33.33333%;
-      max-width: 33.33333%;
+    .selectableRows .row .actions:nth-child(1):nth-last-child(10) ~ div.firstVisible{
+      min-width: calc(20% - $action-column-width);
+      max-width: calc(20% - $action-column-width);
     }
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(6),
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(6) ~ div.cell{
-      min-width: calc(50% - (40px / 5));
-      max-width: calc(50% - (40px / 5));;
+
+    .row div:nth-child(1):nth-last-child(9),
+    .row div:nth-child(1):nth-last-child(9) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(9),
+    .selectableRows .row div:nth-child(1):nth-last-child(9) ~ div.cell{
+      min-width: 33.333%;
+      max-width: 33.3333%;
     }
-    div.cell:nth-child(1):nth-last-child(6),
-    div.cell:nth-child(1):nth-last-child(6) ~ div.cell{
+    .selectableRows .row .actions:nth-child(1):nth-last-child(9) ~ div.firstVisible{
+      min-width: calc(33.3333% - $action-column-width);
+      max-width: calc(33.3333% - $action-column-width);
+    }
+
+    .row div:nth-child(1):nth-last-child(8),
+    .row div:nth-child(1):nth-last-child(8) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(8),
+    .selectableRows .row div:nth-child(1):nth-last-child(8) ~ div.cell{
+      min-width: 25%;
+      max-width: 25%;
+    }
+    .selectableRows .row .actions:nth-child(1):nth-last-child(8) ~ div.firstVisible{
+      min-width: calc(25% - $action-column-width);
+      max-width: calc(25% - $action-column-width);
+    }
+
+    .row div:nth-child(1):nth-last-child(8),
+    .row div:nth-child(1):nth-last-child(8) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(7),
+    .selectableRows .row div:nth-child(1):nth-last-child(7) ~ div.cell{
+      min-width: 25%;
+      max-width: 25%;
+    }
+    .selectableRows .row .actions:nth-child(1):nth-last-child(7) ~ div.firstVisible{
+      min-width: calc(25% - $action-column-width);
+      max-width: calc(25% - $action-column-width);
+    }
+
+    .row div:nth-child(1):nth-last-child(6),
+    .row div:nth-child(1):nth-last-child(6) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(6),
+    .selectableRows .row div:nth-child(1):nth-last-child(6) ~ div.cell{
       min-width: 33.3333%;
       max-width: 33.3333%;
     }
-    .selectableRows div.cell:nth-child(1):nth-last-child(5),
-    .selectableRows div.cell:nth-child(1):nth-last-child(5) ~ div.cell{
-      min-width: calc(50% - ( 40px / 4));
-      max-width: calc(50% - ( 40px / 4));
+    .selectableRows .row .actions:nth-child(1):nth-last-child(6) ~ div.firstVisible{
+      min-width: calc(33.3333% - $action-column-width);
+      max-width: calc(33.3333% - $action-column-width);
     }
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(5),
-    .selectableRows div.cell.actions:nth-child(1):nth-last-child(5) ~ div.cell{
-      min-width: calc(50% - ( 40px / 4));
-      max-width: calc(50% - ( 40px / 4));
-    }
-    div.cell:nth-child(1):nth-last-child(5),
-    div.cell:nth-child(1):nth-last-child(5) ~ div.cell{
+
+    .row div:nth-child(1):nth-last-child(5),
+    .row div:nth-child(1):nth-last-child(5) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(5),
+    .selectableRows .row div:nth-child(1):nth-last-child(5) ~ div.cell{
       min-width: 33.3333%;
       max-width: 33.3333%;
     }
-    .selectableRows div.cell:nth-child(1):nth-last-child(4),
-    .selectableRows div.cell:nth-child(1):nth-last-child(4) ~ div.cell{
-      min-width: calc(50% - (40px / 2));
-      max-width: calc(50% - (40px / 2))
+    .selectableRows .row .actions:nth-child(1):nth-last-child(5) ~ div.firstVisible{
+      min-width: calc(33.3333% - $action-column-width);
+      max-width: calc(33.3333% - $action-column-width);
     }
-    div.cell:nth-child(1):nth-last-child(4),
-    div.cell:nth-child(1):nth-last-child(4) ~ div.cell{
-      min-width: 2 * 25%;
-      max-width: 2 * 25%;
-    }
-    .selectableRows div.cell:nth-child(1):nth-last-child(3),
-    .selectableRows div.cell:nth-child(1):nth-last-child(3) ~ div.cell{
-      min-width: calc(50% - (40px / 2));
-      max-width: calc(50% - (40px / 2));
-    }
-    div.cell:nth-child(1):nth-last-child(3),
-    div.cell:nth-child(1):nth-last-child(3) ~ div.cell{
+
+    .row div:nth-child(1):nth-last-child(4),
+    .row div:nth-child(1):nth-last-child(4) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(4),
+    .selectableRows .row div:nth-child(1):nth-last-child(4) ~ div.cell{
       min-width: 50%;
       max-width: 50%;
     }
-    .selectableRows div.cell:nth-child(1):nth-last-child(2),
-    .selectableRows div.cell:nth-child(1):nth-last-child(2) ~ div.cell{
-      min-width: calc(100% - 40px);
-      max-width: calc(100% - 40px);
+    .selectableRows .row .actions:nth-child(1):nth-last-child(4) ~ div.firstVisible{
+      min-width: calc(50% - $action-column-width);
+      max-width: calc(50% - $action-column-width);
     }
-    div.cell:nth-child(1):nth-last-child(2),
-    div.cell:nth-child(1):nth-last-child(2) ~ div.cell{
+
+    .row div:nth-child(1):nth-last-child(3),
+    .row div:nth-child(1):nth-last-child(3) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(3),
+    .selectableRows .row div:nth-child(1):nth-last-child(3) ~ div.cell{
       min-width: 50%;
       max-width: 50%;
     }
-    div.cell:nth-child(1):nth-last-child(1),
-    div.cell:nth-child(1):nth-last-child(1) ~ div.cell{
+    .selectableRows .row .actions:nth-child(1):nth-last-child(3) ~ div.firstVisible{
+      min-width: calc(50% - $action-column-width);
+      max-width: calc(50% - $action-column-width);
+    }
+
+    .row div:nth-child(1):nth-last-child(2),
+    .row div:nth-child(1):nth-last-child(2) ~ div.cell,
+    .selectableRows .row div:nth-child(1):nth-last-child(2),
+    .selectableRows .row div:nth-child(1):nth-last-child(2) ~ div.cell{
       min-width: 100%;
       max-width: 100%;
     }
-    .table.selectableRows div.cell.actions{
-      padding-right: 0.5em;
-      max-width: 40px;
-      min-width: 40px;
-      max-height: 1.5em;
-      overflow: hidden;
+    .selectableRows .row .actions:nth-child(1):nth-last-child(2) ~ div.firstVisible{
+      min-width: calc(100% - $action-column-width);
+      max-width: calc(100% - $action-column-width);
     }
   }
 }

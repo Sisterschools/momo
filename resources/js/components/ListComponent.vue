@@ -1,18 +1,15 @@
 <script setup>
   import { RouterLink } from 'vue-router';
-import { store } from '../store.js'
+  import { store } from '../store.js'
 
   defineProps({
-    id: {type: String, required: false, default: 'id'},
+    columns: {type:Object, required:true, default: new Object},
     selectableRows: {type: Boolean, required: false, default: false},
     shiftClick: {type: Boolean, required: false, default: false},
     showIDColumn: { type: Boolean, required: false, default: false}, 
     items: {type: Array, required: true, default: new Array},
     onRowClick: {type: Function, required: false, default: () => {}},
     caption: {type: String, required: true, default: 'List'},
-    doNotShow: {type: Array, required: false, default: new Array},
-    subItems: {type: JSON, required: false, default: new Array},
-    transscribe: {type: Array, required: false, default: new Array}
   })
 </script>
 
@@ -20,26 +17,60 @@ import { store } from '../store.js'
 export default{
   data(){
     return {
+      showItems: [],
       itemsHaveValidIds: true,
-      tableClass: 'table selectableRows ' + ( this.selectableRows && this.itemsHaveValidIds ? ' selectableRows' : ''),
       selectedIds: [],
-      prevSelected: null
+      prevSelected: null,
+      transscribe: [],
+      subItems: [],
+      visibleColumns: [],
+      id: 'id'
     }
   },
   computed:{
-    filtered: function(){
-      var objs = this.items.map( ( obj ) => {
-        var o = Object.assign({}, obj)
-        if(! this.showIDColumn)
-          delete o[this.id]
-        this.doNotShow.forEach((fld) => {
-          delete o[fld]
+    parseItems: function(){
+      var newItems = []
+
+      this.items.forEach( ( item ) => {
+        var newItem = {}
+        Object.keys(this.columns).reverse().forEach((j) => {
+          if(this.columns[j]['as'])
+            this.transscribe.push([j, this.columns[j]['as']])
+          if(this.columns[j]['subItem'])
+            this.subItems.push(this.columns[j]['subItem'])
+          for(var i in item){
+            if( i == j ){
+              if(this.columns[j]['type'] == 'date'){
+                var d = new Date(item[j])
+                if( d ){
+                  var opts = this.columns[j]['params'] || 
+                    {
+                      year: 'numeric', 
+                      month: 'short', 
+                      day:'numeric', 
+                      hour:'numeric', 
+                      minute: 'numeric'
+                    }
+                  d = d.toLocaleDateString('en-EN', opts)
+                  item[j] = d
+                }
+              }
+              newItem = Object.assign({ [i]: item[j] }, newItem)
+            }
+          }
         })
+        newItems.push(newItem)
+      })
+      return newItems
+    },
+    filtered: function(){
+      var objs = this.showItems.map( ( obj ) => {
+        var o = Object.assign({}, obj)
         this.subItems.forEach( ( si ) => {
           for(var i in si){
             var rpl = si[i].split('.')
             rpl = rpl[1].replaceAll("'", "")
-            this.items.forEach( ( item ) => {
+            this.showItems.forEach( ( item ) => {
               if(item[i.toString()] && item[i.toString()][rpl])
                 item[i] = item[i.toString()][rpl]
             })
@@ -50,27 +81,29 @@ export default{
       return objs
     },
     filtered0: function(){
-      var objs = Object.entries(this.items[0]),
-        n = objs.findIndex( ( o ) => o[0] == this.id)
-      if( ! this.showIDColumn && n > -1 )
-        objs.splice( n, 1)
-      this.doNotShow.forEach((fld) => {
-        var m = objs.findIndex( ( o ) => o[0] == fld )
-        console.log(m)
-        if( m > -1 )
-          objs.splice( m, 1 )
+      var objs = Object.keys(this.showItems[0]),
+        items = {}
+      objs.forEach((k) => {
+        items[k] = k
       })
       this.transscribe.forEach( ( tr ) => {
-        var o = objs.findIndex(( q ) => q[0] == tr[0])
+        var o = objs.findIndex(( q ) => q == tr[0])
         if(o > -1)
-          objs[0][o] = tr[1]
+          items[tr[0]] = tr[1]
       })
-      return objs
+      return items
     }
   },
   beforeMount(){
+    Object.keys(this.columns).forEach( (key, n) => { 
+      if( typeof this.columns[key]['visible'] == 'undefined' || 
+        this.columns[key]['visible'] == true)
+        this.visibleColumns.push(n)
+      if( this.columns[key]['type'] == 'id')
+        this.id = key
+    })
     this.items.forEach( ( obj ) => {
-      if( ! obj[this.id] ) this.itemsHaveValidIds = false
+      if( typeof obj[this.id] == 'undefined') this.itemsHaveValidIds = false
     })
   },
   mounted(){
@@ -81,6 +114,24 @@ export default{
     store.isListComponent = false;
   },
   methods:{
+    toggleDropdown(){
+      var el = this.$el.querySelector('ul.dropdown'),
+        icon = this.$el.querySelector('.expandable')
+      el.classList.toggle('hide')
+      icon.classList.toggle('expanded')
+    },
+    classIfNotVisibleColumn(key){
+      var i = Object.keys(this.columns).indexOf(key),
+        min = Math.min(...this.visibleColumns)
+      if(i == min)
+        return 'cell firstVisible'
+      else if(this.visibleColumns.indexOf(i) == -1)
+        return 'hide'
+      return 'cell'
+    },
+    tableClasses(){
+      return 'table ' + (this.selectableRows && this.itemsHaveValidIds ? ' selectableRows' : '')
+    },
     onShiftClick(evnt){
       if(evnt.target.nodeName == 'INPUT'){
         var cell = evnt.target.closest('.row').querySelector('.cell:nth-child(2)'),
@@ -106,9 +157,8 @@ export default{
     _onRowClick( o ){
       var id = 
         o.target.closest('.row')
-        .querySelector('div:not([data-src=""])')
+        .querySelector('div:not(.actions)')
         .getAttribute('data-src')
-
       if(id)
         this.onRowClick( id )
     },
@@ -116,7 +166,7 @@ export default{
       if(! evnt.target.checked) 
         this.selectedIds = []
       else{
-        this.items.forEach(( i ) => {
+        this.showItems.forEach(( i ) => {
           this.selectedIds.push(i[this.id])
         })
       }
@@ -127,17 +177,45 @@ export default{
 
 <template>
   <div>
-    <div class="header">
-      <div v-if="selectableRows">
-        <select :disabled="selectedIds.length == 0">
+    <div class="header1">
+      <div>
+        <select 
+          v-if="selectableRows"
+          :disabled="selectedIds.length == 0"
+        >
           <option>With selected ...</option>
         </select>
-      </div>
-      <div>
         <p>{{ caption }}</p>
+        <div>
+          <ul>
+            <li
+              @click="toggleDropdown"
+            >
+              <span class="expandable" />
+              Columns
+            </li>
+            <li>
+              <ul class="dropdown hide">
+                <li
+                  v-for="(n, i) in Object.keys(columns)" 
+                  :key="n"
+                >
+                  <label>
+                    <input 
+                      v-model="visibleColumns"
+                      type="checkbox"
+                      :value="i"
+                    > 
+                    {{ n }}
+                  </label>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-    <p v-if="items.length == 0">
+    <p v-if="(showItems = parseItems) && showItems.length == 0">
       Nothing here yet: create one 
       <RouterLink :to="store.addNew">
         here
@@ -145,39 +223,38 @@ export default{
     </p>
     <div 
       v-else
-      :class="tableClass"
+      :class="tableClasses()"
     >
       <div 
-        v-if="items && items[0]"
+        v-if="showItems && showItems[0]"
         class="row" 
       >
         <div 
           v-if="selectableRows && itemsHaveValidIds"
-          class="cell actions"
+          class="actions"
         >
-          <input 
+          <input
             type="checkbox" 
             class="selectAll"
             @change="selectOrDeselectAll"
           >
         </div>
         <div
-          v-for="(key) in filtered0" 
+          v-for="(value, key) in filtered0"
           :key="key"
-          :class="showIDColumn || id != key[0] ? 'cell': null"
+          :class="classIfNotVisibleColumn(key)" 
         >
-          {{ showIDColumn || id != key[0] ? key[0] : '' }}
+          {{ value }}
         </div>
       </div>
       <div  
-        v-for="(item, n) in filtered" 
+        v-for="(item, n) in filtered"
         :key="item"
-        class="row"
-        @click.stop="_onRowClick" 
+        class="row" 
       >
         <div 
           v-if="selectableRows && itemsHaveValidIds"
-          class="cell actions"
+          class="actions"
         >
           <input 
             v-model="selectedIds"
@@ -190,9 +267,10 @@ export default{
           v-for="(prop, index) in item"
           :key="prop"
           :data-src="items[n][id]"
-          :class="showIDColumn || index != id ? 'cell' : null"
+          :class="classIfNotVisibleColumn(index)"
+          @click.stop="_onRowClick"
         >
-          {{ showIDColumn || index != id ? prop : '' }}
+          {{ prop }}
         </div>
       </div>
     </div>
@@ -200,20 +278,55 @@ export default{
 </template>
 
 <style scoped>
-.header > div{
-  float: left;
+.header1 div{
+  box-sizing: border-box;
 }
-.header select{
-  padding: 0.5em 0.5em;
-}
-.header > div:nth-child(1){
-  position: absolute;
-  margin-top: 1em;
-}
-.header > div:nth-child(2){
+.header1 > div:nth-child(2){
   width: 100%;
+}
+.header1 select{
+  position: absolute;
+  left: 0.5em;
+  margin-top: 1em; 
+  padding: 0.5em 0.5em;
+  min-width: 12em;
+  max-width: 12em;
+}
+#app .header1 ul{
+  cursor: pointer;
+  position: absolute;
+  background-color: var(--momo-white);
+  right: 0.5em;
+  margin-top: 1em;
+  z-index: 99;
+}
+#app .header1 ul ul{
+  border: 2px solid var(--momo-blue);
+}
+#app .header1 ul li{
+  padding-top: 0;
+}
+#app .header1 ul li input{
+  display: inline;
+  width: 2em;
+  accent-color: var(--momo-blue);
+  color: var(--momo-white);
+}
+.header1 > div:nth-child(1){
+  width: 100%;
+}
+.header1 > div:nth-child(2){
+  width: 100%;
+  position: relative;
+  left: -12em; 
 }
 p{
   text-align: center;
+  width: calc(100% - 12em);
+  float:left;
 }
+.dropdown{
+  width: 12em;
+}
+
 </style>

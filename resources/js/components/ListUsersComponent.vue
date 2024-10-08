@@ -34,10 +34,17 @@ export default{
 <template>
   <ListComponent 
     :items="items" 
+    :columns="{
+      id: { type:'id', visibility:false},
+      name: {},
+      email: {},
+      role: {},
+      created_at:{type:'date', visibility:false},
+      updated_at:{type:'date', visibility:false}
+    }"
     :selectable-rows="selectableRows"
     :shift-click="true"
     :on-row-click="selectUser"
     caption="Users"
-    :do-not-show="['created_at', 'updated_at', 'photo']"
   /> 
 </template>

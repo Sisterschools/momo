@@ -13,6 +13,12 @@ input, button{
     border-radius: 4px;
     border-color: #f8f8f8;
 }
+input[type=checkbox]{
+  display: inline;
+  width: 2em;
+  accent-color: var(--momo-blue);
+  color: var(--momo-white);
+}
 #app button.submit{
     background-color: var(--momo-red);
 }
@@ -73,6 +79,16 @@ input:focus{
     }
     .hide{
         display: none;
+    }
+    .expandable{
+      display: inline-block;
+      color: var(--momo-blue);
+    }
+    .expandable:before{
+      content: '\25b7';
+    }
+    .expanded{
+      transform: rotate(90deg);
     }
     nav,
     main,
