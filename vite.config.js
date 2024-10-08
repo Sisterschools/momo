@@ -24,7 +24,7 @@ export default defineConfig({
             },
         }),
         legacy({
-          targets: ['chrome' >= 64]
+          //targets: ['chrome' >= 64]
         })
     ],
     resolve: {
