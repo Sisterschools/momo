@@ -10,6 +10,7 @@ export default{
   methods:{
     expand(){
       this.$el.querySelector('.dropdown').classList.toggle('hide')
+      this.$el.querySelector('.expandable').classList.toggle('expanded')
     }
   }
 }
@@ -21,6 +22,7 @@ export default{
       class="name"
       @click.stop="expand"
     >
+      <span class="expandable"/>
       {{ user.name }}
     </li>
     <li>
