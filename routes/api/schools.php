@@ -15,5 +15,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('schools/{school}/teachers', [SchoolController::class, 'attachTeachersToSchool'])
         ->name('schools.teachers.attach');
 
+
+    // List all students in a school
+    Route::get('schools/{school}/students', [SchoolController::class, 'listStudents'])
+        ->name('schools.students.list');
+
+    // List all teachers in a school
+    Route::get('schools/{school}/teachers', [SchoolController::class, 'listTeachers'])
+        ->name('schools.teachers.list');
+
     Route::apiResource('schools', SchoolController::class);
 });

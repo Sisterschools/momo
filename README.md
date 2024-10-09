@@ -107,7 +107,7 @@ Authentication for this API is handled using Bearer tokens. After a successful l
   - Success: `200` with the message `"Password has been setup successfully."`
   - Failure: `400` with the message `"Invalid token."`
 
-  
+
 ### Logout
 
 - **URL:** `/api/logout`
@@ -222,6 +222,19 @@ All routes in this section require authentication using Bearer tokens.
 - **Request Body:**
   - `search` (optional): String
 - **Response:** Returns a list of schools matching the search criteria
+
+### List Students in a School
+- **URL:** `/api/schools/{school}/students`
+- **Method:** `GET`
+- **Description:** Retrieve a list of all students in a specific school
+- **Authentication:** Required (Bearer Token)
+
+### List Teachers in a School
+- **URL:** `/api/schools/{school}/teachers`
+- **Method:** `GET`
+- **Description:** Retrieve a list of all teachers in a specific school
+- **Authentication:** Required (Bearer Token)
+
 
 ## Students
 All routes in this section require authentication using Bearer tokens.

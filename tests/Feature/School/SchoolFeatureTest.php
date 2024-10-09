@@ -456,6 +456,76 @@ class SchoolFeatureTest extends TestCase
                 'teacher_id' => $teacher->id,
             ]);
         }
+
+    }
+
+
+    public function test_list_students_in_school()
+    {
+        // Create an admin user and authenticate
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        // Create a school and some students
+        $school = School::factory()->create();
+        $students = Student::factory()->count(3)->create();
+
+        // Attach students to the school
+        $school->students()->attach($students->pluck('id')->toArray());
+
+        // Make the GET request
+        $response = $this->actingAs($admin)->getJson("/api/schools/{$school->id}/students");
+
+        // Assert the response
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => ['id', 'name', 'photo'], // Adjust according to your Student resource structure
+                ],
+                'links' => [
+                    'self',
+                ],
+            ]);
+
+        // Assert that the students are included in the response
+        foreach ($students as $student) {
+            $this->assertDatabaseHas('students', [
+                'id' => $student->id,
+            ]);
+        }
+    }
+
+    public function test_list_teachers_in_school()
+    {
+        // Create an admin user and authenticate
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        // Create a school and some teachers
+        $school = School::factory()->create();
+        $teachers = Teacher::factory()->count(3)->create();
+
+        // Attach teachers to the school
+        $school->teachers()->attach($teachers->pluck('id')->toArray());
+
+        // Make the GET request
+        $response = $this->actingAs($admin)->getJson("/api/schools/{$school->id}/teachers");
+
+        // Assert the response
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => ['id', 'name', 'photo', 'phone_number', 'bio'], // Adjust according to your Teacher resource structure
+                ],
+                'links' => [
+                    'self',
+                ],
+            ]);
+
+        // Assert that the teachers are included in the response
+        foreach ($teachers as $teacher) {
+            $this->assertDatabaseHas('teachers', [
+                'id' => $teacher->id,
+            ]);
+        }
     }
 
 }

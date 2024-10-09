@@ -12,6 +12,8 @@ use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Requests\School\SearchSchoolRequest;
 use App\Http\Resources\SchoolResource;
 use App\Http\Resources\SchoolCollection;
+use App\Http\Resources\StudentCollection;
+use App\Http\Resources\TeacherCollection;
 use App\Http\Requests\School\AttachStudentsToSchoolRequest;
 use App\Http\Requests\School\AttachTeachersToSchoolRequest;
 
@@ -130,4 +132,27 @@ class SchoolController extends Controller
             'attached_teacher_count' => count($teacherIds)
         ]);
     }
+
+    // List all students in school
+    public function listStudents(School $school)
+    {
+        $this->authorize('view', $school);
+
+        $students = $school->students()->paginate(); // You can adjust pagination as needed
+
+        return StudentCollection::make($students);
+
+    }
+
+    // List all teachers in school
+    public function listTeachers(School $school)
+    {
+        $this->authorize('view', $school);
+
+        $teachers = $school->teachers()->paginate(); // You can adjust pagination as needed
+
+        return TeacherCollection::make($teachers);
+
+    }
+
 }
