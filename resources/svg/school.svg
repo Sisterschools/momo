@@ -48,7 +48,7 @@
         <g
            id="g9-0"
            transform="matrix(-0.52291552,0,0,0.53478024,83.392026,-43.852951)"
-           style="stroke-width:1.89101">
+          >
           <path
              d="m 60.665208,170.80339 h 48.013112 v 57.09666 H 60.665208 Z"
              id="path1-5"
@@ -98,7 +98,7 @@
              id="path9-10-1-8"
              sodipodi:nodetypes="csc" />
           <path
-             style="fill:none;stroke:#000000;stroke-width:0.500333px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             style="fill:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
              d="m 99.850917,193.58936 c 0,0 -1.175121,-0.48093 -3.973046,0.0344 -2.79792,0.51529 -3.693252,-0.584 -3.693252,-0.584 m 7.666306,0.54964 c 0,0 -1.175129,-0.48093 -3.973049,0.0344 -2.797917,0.51529 -3.693256,-0.584 -3.693256,-0.584"
              id="path9-1-4-9-6"
              sodipodi:nodetypes="csc" />
@@ -122,7 +122,7 @@
         <g
            id="g9-0-3"
            transform="matrix(-0.52291552,0,0,0.53478024,111.17129,-43.852951)"
-           style="stroke-width:1.89101">
+           >
           <path
              d="m 60.665208,170.80339 h 48.013112 v 57.09666 H 60.665208 Z"
              id="path1-5-3"
@@ -196,7 +196,7 @@
       <g
          id="g3"
          transform="matrix(0.48301001,0,0,0.48231438,3.979317,-21.728369)"
-         style="stroke-width:3.10776;stroke-dasharray:none">
+         style="stroke-dasharray:none">
         <path
            d="M 30.657016,147.12124 100.24358,77.534679"
            id="path1" />

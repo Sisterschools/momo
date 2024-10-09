@@ -12,13 +12,21 @@ input, button{
     margin-bottom: 0.5em;
     border-radius: 4px;
     border-color: #f8f8f8;
-    -webkit-appearance: none;
+}
+input[type=checkbox]{
+  display: inline;
+  width: 2em;
+  accent-color: var(--momo-blue);
+  color: var(--momo-white);
+}
+#app button.submit{
+    background-color: var(--momo-red);
 }
 input:focus{
     outline-color: 1px solid var(--momo-black);
     outline-style:groove;
 }
-#app main div{
+#app{
     *{
         color: var(--momo-black);
     }
@@ -60,10 +68,89 @@ input:focus{
     button:hover{
         zoom: 1.1;
     }
+    ul{
+        list-style-type:none
+    }
     .small-font{
         font-size: 80%;
     }
     .italic{
         font-style: italic;
+    }
+    .hide{
+        display: none;
+    }
+    .expandable{
+      display: inline-block;
+      color: var(--momo-blue);
+    }
+    .expandable:before{
+      content: '\25b7';
+    }
+    .expanded{
+      transform: rotate(90deg);
+    }
+    nav,
+    main,
+    .header{
+        float: left;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    nav{
+        padding: 0.5em 0.5em;
+    }
+    ul{
+        padding: 0;
+        margin: 0;
+    }
+    textarea{
+        min-height: 4em;
+        line-height: $line-height;
+        width: 100%;
+        max-width: 100%;
+        padding: 0.5em 1em;
+        box-sizing: border-box;
+    }
+    input:focus,
+    select:focus{
+      outline: 1px solid var(--momo-blue);
+    }
+    .header div.user-details > ul{
+        width: 10em;
+        box-sizing: border-box;
+    }
+    .header ul.user-details,
+    .header ul.user-details .dropdown{
+        width: 10em;
+        float:right;
+        box-sizing: border-box
+    }
+    .header ul.user-details li{
+        cursor: pointer;
+    }
+    .header ul li.name{
+        padding-left: 0.5em;
+        font-size: 80%;
+    }
+    .header ul.user-details ul li{
+        padding-left: 0.5em;
+        padding-top: 0.5em;
+    }
+    .clr-border-left-admin,
+    .clr-border-left-admin ul{
+        box-shadow:2px 0 0 0 var(--momo-red) inset;
+    }
+    .clr-border-left-school,
+    .clr-border-left-school ul{
+        box-shadow:2px 0 0 0 var(--momo-purple) inset;
+    }
+    .clr-border-left-teacher,
+    .clr-border-left-teacher ul{
+        box-shadow:2px 0 0 0 var(--momo-blue) inset;
+    }
+    .clr-border-left-student,
+    .clr-border-left-student ul{
+        box-shadow:2px 0 0 0 var(--momo-green) inset;
     }
 }

@@ -27,13 +27,20 @@ export default{
         email: this.email, 
         password: this.password
       }, 
-      'POST' )
+      'POST', 
+      )
       .catch( () => this.invalid = true )
       .then( ( json ) => {
         if(this.invalid == false){
           this.invalid = false
           store.token = json.access_token
           store.userData = json
+          
+          /*  
+            Different users can login using a different tab: so start the title with their name
+          */
+          var title = document.querySelector('title').innerText
+          document.querySelector('title').innerText = json.data.name + ' : ' + title
         }
       })
     }
@@ -88,5 +95,11 @@ export default{
 <style scoped>
 #app p.error{
   color: var(--momo-red);
+}
+#app form{
+    margin: 20vh auto;
+}
+#app p{
+    margin: 0;
 }
 </style>
