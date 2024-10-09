@@ -15,18 +15,18 @@ class UserController extends Controller
     use AuthorizesRequests; // Add this line to import the trait
 
     // List all users
-    public function index()
-    {
+    // public function index()
+    // {
 
-        $users = User::paginate();
-        return UserCollection::make($users);
-    }
+    //     $users = User::paginate();
+    //     return UserCollection::make($users);
+    // }
 
     // Show a single user
-    public function show(User $user)
-    {
-        return UserResource::make($user);
-    }
+    // public function show(User $user)
+    // {
+    //     return UserResource::make($user);
+    // }
 
 
     // Update a user's details

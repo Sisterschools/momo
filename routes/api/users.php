@@ -18,5 +18,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/roles', [UserController::class, 'getRoles'])
         ->name('users.roles');
 
-    Route::apiResource('users', UserController::class);
+    Route::put('/users/{user}', [UserController::class, 'update'])
+        ->name('users.update');
+
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])
+        ->name('users.destroy');
 });

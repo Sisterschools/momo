@@ -131,49 +131,6 @@ class UserFeatureTest extends TestCase
     }
 
 
-
-    /**
-     * Test user pagination.
-     *
-     * @return void
-     */
-    public function test_can_get_users_paginate()
-    {
-        // Create a user and generate a token
-        $user = User::factory()->create();
-
-        $token = $user->createToken('TestToken')->plainTextToken;
-
-        // Create 50 users
-        User::factory()->count(50)->create();
-
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-        ])->getJson('/api/users?page=1');
-
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'data' => [
-                    '*' => [
-                        'id',
-                        'name',
-                        'email',
-                        'role',
-                        'created_at',
-                        'updated_at',
-                    ],
-                ],
-                'links' => [
-                    'first',
-                    'last',
-                    'prev',
-                    'next',
-                ],
-                'meta' => [],
-            ]);
-    }
-
-
     /**
      * Test admin can register a user and send email.
      *

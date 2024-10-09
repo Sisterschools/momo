@@ -88,10 +88,25 @@ Authentication for this API is handled using Bearer tokens. After a successful l
 - **Required Fields:**
   - `name`
   - `email`
-  - `password`
-  - `password_confirmation`
+
 - **Authentication:** Required (Bearer Token of an admin user)
 - **Response:** Returns user details and an access token upon successful registration
+
+### Password Setup
+
+- **URL:** `/api/users/password/reset`
+- **Method:** `POST`
+- **Description:** Set up or reset the password for a user using a valid token
+- **Required Fields:**
+  - `email` - The email address of the user
+  - `password` - The new password (must be confirmed)
+  - `password_confirmation` - Confirmation of the new password
+  - `token` - The reset token provided to the user
+
+- **Response:**
+  - Success: `200` with the message `"Password has been setup successfully."`
+  - Failure: `400` with the message `"Invalid token."`
+
 
 ### Logout
 
@@ -134,26 +149,6 @@ All routes in this section require authentication. Some operations are restricte
 - **Description:** Retrieve available user roles
 - **Authentication:** Required (Bearer Token)
 
-### List Users
-
-- **URL:** `/api/users`
-- **Method:** `GET`
-- **Description:** Retrieve a list of users
-- **Authentication:** Required (Bearer Token)
-
-### Get User
-
-- **URL:** `/api/users/{id}`
-- **Method:** `GET`
-- **Description:** Retrieve details of a specific user
-- **Authentication:** Required (Bearer Token)
-
-### Create User
-
-- **URL:** `/api/users`
-- **Method:** `POST`
-- **Description:** Create a new user
-- **Authentication:** Required (Bearer Token)
 
 ### Update User (Admin only)
 
@@ -227,6 +222,19 @@ All routes in this section require authentication using Bearer tokens.
 - **Request Body:**
   - `search` (optional): String
 - **Response:** Returns a list of schools matching the search criteria
+
+### List Students in a School
+- **URL:** `/api/schools/{school}/students`
+- **Method:** `GET`
+- **Description:** Retrieve a list of all students in a specific school
+- **Authentication:** Required (Bearer Token)
+
+### List Teachers in a School
+- **URL:** `/api/schools/{school}/teachers`
+- **Method:** `GET`
+- **Description:** Retrieve a list of all teachers in a specific school
+- **Authentication:** Required (Bearer Token)
+
 
 ## Students
 All routes in this section require authentication using Bearer tokens.
@@ -332,6 +340,21 @@ All routes in this section require authentication using Bearer tokens.
   - `search` (optional): String
 - **Response:** Returns a list of teachers matching the search criteria
 
+### Attach Students to School
+- **URL:** `/api/schools/{school_id}/students`
+- **Method:** `POST`
+- **Description:** Attach students to a school
+- **Authentication:** Required (Bearer Token)
+- **Body:** JSON array of student IDs
+
+### Attach Teachers to School
+- **URL:** `/api/schools/{school_id}/teachers`
+- **Method:** `POST`
+- **Description:** Attach teachers to a school
+- **Authentication:** Required (Bearer Token)
+- **Body:** JSON array of teacher IDs
+
+---
 
 
 ## Projects
@@ -375,6 +398,19 @@ All routes in this section require authentication using Bearer tokens.
 - **Description:** Retrieve a list of programs associated with a specific project
 - **Authentication:** Required (Bearer Token)
 
+### Attach Students to Project
+- **URL:** `/api/projects/{project_id}/students`
+- **Method:** `POST`
+- **Description:** Attach students to a project
+- **Authentication:** Required (Bearer Token)
+- **Body:** JSON array of student IDs
+
+### Attach Teachers to Project
+- **URL:** `/api/projects/{project_id}/teachers`
+- **Method:** `POST`
+- **Description:** Attach teachers to a project
+- **Authentication:** Required (Bearer Token)
+- **Body:** JSON array of teacher IDs
 ---
 
 ## Programs

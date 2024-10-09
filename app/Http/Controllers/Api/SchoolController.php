@@ -12,6 +12,11 @@ use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Requests\School\SearchSchoolRequest;
 use App\Http\Resources\SchoolResource;
 use App\Http\Resources\SchoolCollection;
+use App\Http\Resources\StudentCollection;
+use App\Http\Resources\TeacherCollection;
+use App\Http\Requests\School\AttachStudentsToSchoolRequest;
+use App\Http\Requests\School\AttachTeachersToSchoolRequest;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -102,4 +107,52 @@ class SchoolController extends Controller
 
         return SchoolCollection::make($schools);
     }
+
+
+    // Attach students to school
+    public function attachStudentsToSchool(AttachStudentsToSchoolRequest $request, School $school)
+    {
+        $this->authorize('update', $school); // You may want to create a policy for this
+        $studentIds = $request->validated()['student_ids'];
+        $school->students()->syncWithoutDetaching($studentIds); // Attach without detaching existing students
+        return response()->json([
+            'message' => 'Students attached to the school successfully.',
+            'attached_student_count' => count($studentIds)
+        ]);
+    }
+
+    // Attach teachers to school
+    public function attachTeachersToSchool(AttachTeachersToSchoolRequest $request, School $school)
+    {
+        $this->authorize('update', $school); // You may want to create a policy for this
+        $teacherIds = $request->validated()['teacher_ids'];
+        $school->teachers()->syncWithoutDetaching($teacherIds); // Attach without detaching existing teachers
+        return response()->json([
+            'message' => 'Teachers attached to the school successfully.',
+            'attached_teacher_count' => count($teacherIds)
+        ]);
+    }
+
+    // List all students in school
+    public function listStudents(School $school)
+    {
+        $this->authorize('view', $school);
+
+        $students = $school->students()->paginate(); // You can adjust pagination as needed
+
+        return StudentCollection::make($students);
+
+    }
+
+    // List all teachers in school
+    public function listTeachers(School $school)
+    {
+        $this->authorize('view', $school);
+
+        $teachers = $school->teachers()->paginate(); // You can adjust pagination as needed
+
+        return TeacherCollection::make($teachers);
+
+    }
+
 }
