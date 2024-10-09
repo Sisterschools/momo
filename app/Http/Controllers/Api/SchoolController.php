@@ -12,6 +12,9 @@ use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Requests\School\SearchSchoolRequest;
 use App\Http\Resources\SchoolResource;
 use App\Http\Resources\SchoolCollection;
+use App\Http\Requests\School\AttachStudentsToSchoolRequest;
+use App\Http\Requests\School\AttachTeachersToSchoolRequest;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -101,5 +104,30 @@ class SchoolController extends Controller
         $schools = School::search($term)->paginate()->appends(['search' => $term]); // Paginate search results with 10 items per page
 
         return SchoolCollection::make($schools);
+    }
+
+
+    // Attach students to school
+    public function attachStudentsToSchool(AttachStudentsToSchoolRequest $request, School $school)
+    {
+        $this->authorize('update', $school); // You may want to create a policy for this
+        $studentIds = $request->validated()['student_ids'];
+        $school->students()->syncWithoutDetaching($studentIds); // Attach without detaching existing students
+        return response()->json([
+            'message' => 'Students attached to the school successfully.',
+            'attached_student_count' => count($studentIds)
+        ]);
+    }
+
+    // Attach teachers to school
+    public function attachTeachersToSchool(AttachTeachersToSchoolRequest $request, School $school)
+    {
+        $this->authorize('update', $school); // You may want to create a policy for this
+        $teacherIds = $request->validated()['teacher_ids'];
+        $school->teachers()->syncWithoutDetaching($teacherIds); // Attach without detaching existing teachers
+        return response()->json([
+            'message' => 'Teachers attached to the school successfully.',
+            'attached_teacher_count' => count($teacherIds)
+        ]);
     }
 }

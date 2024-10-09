@@ -4,6 +4,8 @@ namespace Tests\Feature\School;
 
 use App\Models\School;
 use App\Models\User;
+use App\Models\Teacher;
+use App\Models\Student;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Hash;
@@ -392,4 +394,68 @@ class SchoolFeatureTest extends TestCase
         // Assert the associated user no longer exists in the database
         $this->assertDatabaseMissing('users', ['id' => $userId]);
     }
+
+
+    public function test_attach_students_to_school()
+    {
+        // Create an admin user
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        // Create a school and students
+        $school = School::factory()->create();
+        $students = Student::factory()->count(3)->create();
+
+        // Prepare the request data
+        $data = [
+            'student_ids' => $students->pluck('id')->toArray()
+        ];
+
+        // Make the POST request to attach students to the school
+        $response = $this->actingAs($admin)->postJson("/api/schools/{$school->id}/students", $data);
+
+        // Assert the response
+        $response->assertStatus(200)
+            ->assertJson(['message' => 'Students attached to the school successfully.'])
+            ->assertJsonStructure(['attached_student_count']);
+
+        // Check that the students were attached to the school
+        foreach ($students as $student) {
+            $this->assertDatabaseHas('school_student', [
+                'school_id' => $school->id,
+                'student_id' => $student->id,
+            ]);
+        }
+    }
+
+    public function test_attach_teachers_to_school()
+    {
+        // Create an admin user
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        // Create a school and teachers
+        $school = School::factory()->create();
+        $teachers = Teacher::factory()->count(3)->create();
+
+        // Prepare the request data
+        $data = [
+            'teacher_ids' => $teachers->pluck('id')->toArray()
+        ];
+
+        // Make the POST request to attach teachers to the school
+        $response = $this->actingAs($admin)->postJson("/api/schools/{$school->id}/teachers", $data);
+
+        // Assert the response
+        $response->assertStatus(200)
+            ->assertJson(['message' => 'Teachers attached to the school successfully.'])
+            ->assertJsonStructure(['attached_teacher_count']);
+
+        // Check that the teachers were attached to the school
+        foreach ($teachers as $teacher) {
+            $this->assertDatabaseHas('school_teacher', [
+                'school_id' => $school->id,
+                'teacher_id' => $teacher->id,
+            ]);
+        }
+    }
+
 }
