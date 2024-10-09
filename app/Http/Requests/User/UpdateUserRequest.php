@@ -34,7 +34,6 @@ class UpdateUserRequest extends FormRequest
                 'max:255',
                 Rule::unique('users')->ignore($userId),  // Ensure email is unique except for the current user
             ],
-            'password' => 'sometimes|string|min:8',  // Only required if password is being updated
             'role' => ['sometimes', Rule::in(['admin', 'school', 'teacher', 'student'])],
         ];
     }
